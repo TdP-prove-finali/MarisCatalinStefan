@@ -2,11 +2,13 @@ package controller;
 
 
 
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.Model;
 
 public class Main extends Application {
 	@Override
@@ -19,7 +21,8 @@ public class Main extends Application {
 
 			Scene scene = new Scene(root);
 			
-			
+			Model model = new Model() ;  
+			((Controller)loader.getController()).setModel(model) ;
 			
 			primaryStage.setScene(scene);
 			primaryStage.show();
