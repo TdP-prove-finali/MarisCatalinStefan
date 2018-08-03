@@ -3,5 +3,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Users/Stefan Maris/git/Lab12/Lab12_Rivers/lib/HikariCP-3.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefan Maris/git/Lab12/Lab12_Rivers/lib/mysql-connector-java-5.1.46-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefan Maris/git/Lab12/Lab12_Rivers/lib/slf4j-api-1.7.25.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefan Maris/git/Lab12/Lab12_Rivers/lib/slf4j-jdk14-1.7.25.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

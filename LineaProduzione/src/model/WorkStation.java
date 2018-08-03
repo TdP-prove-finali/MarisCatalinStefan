@@ -7,6 +7,7 @@ public class WorkStation {
 	private int te;
 	private int ce;
 	
+	private boolean guasti;
 	private int MfMAX;
 	private int MfMIN;
 	private int MrMAX;
@@ -16,6 +17,7 @@ public class WorkStation {
 	private int CrMAX;
 	private int CrMIN;
 	
+	private boolean setup;
 	private int NsMAX;
 	private int NsMIN;
 	private int TsMAX;
@@ -23,8 +25,10 @@ public class WorkStation {
 	private int CsMAX;
 	private int CsMIN;
 	
-	private int pMAX;
-	private int pMIN;
+	
+	private boolean rilavorazioni;
+	private float pMAX;
+	private float pMIN;
 	
 	
 	
@@ -37,6 +41,100 @@ public class WorkStation {
 		this.m = m;
 		this.te = t0;
 		this.ce = c0;
+		
+		guasti=false;
+		setup=false;
+		rilavorazioni=false;
+	}
+
+
+
+
+
+
+
+	public int getM() {
+		return m;
+	}
+
+
+
+
+
+
+
+	public int getTe() {
+		return te;
+	}
+
+
+
+
+
+
+
+	public int getCe() {
+		return ce;
+	}
+
+
+
+
+
+
+
+	public boolean isGuasti() {
+		return guasti;
+	}
+
+
+
+
+
+
+
+	public void setGuasti(boolean guasti) {
+		this.guasti = guasti;
+	}
+
+
+
+
+
+
+
+	public boolean isSetup() {
+		return setup;
+	}
+
+
+
+
+
+
+
+	public void setSetup(boolean setup) {
+		this.setup = setup;
+	}
+
+
+
+
+
+
+
+	public boolean isRilavorazioni() {
+		return rilavorazioni;
+	}
+
+
+
+
+
+
+
+	public void setRilavorazioni(boolean rilavorazioni) {
+		this.rilavorazioni = rilavorazioni;
 	}
 
 
@@ -345,7 +443,7 @@ public class WorkStation {
 
 
 
-	public int getpMAX() {
+	public float getpMAX() {
 		return pMAX;
 	}
 
@@ -355,7 +453,7 @@ public class WorkStation {
 
 
 
-	public void setpMAX(int pMAX) {
+	public void setpMAX(float pMAX) {
 		this.pMAX = pMAX;
 	}
 
@@ -365,7 +463,7 @@ public class WorkStation {
 
 
 
-	public int getpMIN() {
+	public float getpMIN() {
 		return pMIN;
 	}
 
@@ -375,7 +473,7 @@ public class WorkStation {
 
 
 
-	public void setpMIN(int pMIN) {
+	public void setpMIN(float pMIN) {
 		this.pMIN = pMIN;
 	}
 

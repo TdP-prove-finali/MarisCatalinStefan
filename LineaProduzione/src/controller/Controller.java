@@ -5,6 +5,8 @@
 package controller;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -13,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -21,6 +24,9 @@ import model.Model;
 import model.WorkStation;
 
 public class Controller {
+	
+	 private Model model;
+	 private Linea linea;
 	
 
     @FXML // fx:id="hA"
@@ -157,14 +163,28 @@ public class Controller {
 
     @FXML // fx:id="result"
     private TextArea result; // Value injected by FXMLLoader
+    
+    @FXML // fx:id="comboProdotto"
+    private ComboBox<String> comboProdotto; // Value injected by FXMLLoader
+
+    @FXML // fx:id="comboLinea"
+    private ComboBox<Linea> comboLinea; // Value injected by FXMLLoader
+    
+    @FXML // fx:id="txtNomeLinea"
+    private TextField txtNomeLinea; // Value injected by FXMLLoader
 
     @FXML
     void aggiungiWs(ActionEvent event) {
-    	model.getLinea().addWS(wss.getSelectionModel().getSelectedItem());
+    	
+    	linea.addWS(wss.getSelectionModel().getSelectedItem());
     }
+    
 
     @FXML
     void creaLinea(ActionEvent event) {
+    	linea.setNome(txtNomeLinea.getText());
+    	model.addLinea(linea);
+    	comboLinea.getItems().add(linea);
     	hA.setDisable(false);
     	hB.setDisable(false);
     	hC.setDisable(false);
@@ -184,6 +204,7 @@ public class Controller {
     	
     	if(check1.isSelected())
     	{
+    		ws.setGuasti(true);
     		ws.setMfMAX(Integer.parseInt(maxMf.getText()));
     		ws.setMfMIN(Integer.parseInt(minMf.getText()));
     		ws.setMrMAX(Integer.parseInt(maxMr.getText()));
@@ -196,6 +217,7 @@ public class Controller {
     	
     	if(check2.isSelected())
     	{
+    		ws.setSetup(true);
     		ws.setNsMAX(Integer.parseInt(maxNs.getText()));
     		ws.setNsMIN(Integer.parseInt(minNs.getText()));
     		ws.setTsMAX(Integer.parseInt(maxTs.getText()));
@@ -206,6 +228,7 @@ public class Controller {
     	
     	if(check3.isSelected())
     	{
+    		ws.setRilavorazioni(true);
     		ws.setpMAX(Integer.parseInt(maxP.getText()));
     		ws.setpMIN(Integer.parseInt(minP.getText()));
     	
@@ -231,12 +254,13 @@ public class Controller {
     
     @FXML
     void setLinea(ActionEvent event) {
+    	linea=new Linea();
+    	
     	hA.setDisable(true);
     	hB.setDisable(true);
     	hC.setDisable(true);
     	result.setDisable(true);
     	
-    	model.setLinea(new Linea());
     	
 
     }
@@ -333,13 +357,19 @@ public class Controller {
         assert simulazione != null : "fx:id=\"simulazione\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
         assert ottimizza != null : "fx:id=\"ottimizza\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
         assert result != null : "fx:id=\"result\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
+        assert comboProdotto != null : "fx:id=\"comboProdotto\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
+        assert comboLinea != null : "fx:id=\"comboLinea\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
+        assert txtNomeLinea != null : "fx:id=\"txtNomeLinea\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
+
 
     }
     
-    private Model model;
+   
 
 	public void setModel(Model model) {
 		this.model=model;
+		comboProdotto.getItems().addAll(model.getProdotti());
+		
 		
 	}
 }
