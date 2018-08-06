@@ -11,22 +11,25 @@ public class Model {
 	
 	
 	private List<WorkStation> listaWS;
-	private List<Linea> linee;
 	private List<Domanda> domande;
+	private Linea linea;
 
 	public Model()
 	{
 		listaWS=new ArrayList<>();
-		linee=new ArrayList<>();
 		dao=new Dao();
 	}
 	
-	public void simula(String prodotto, Linea linea) {
+	public SimResult simula(String prodotto, Linea linea) {
+		
+		SimResult result= null;
 		
 		domande=dao.getDomande(prodotto);
 		Simulazione sim=new Simulazione(domande,linea);
 		sim.init();
-		sim.run();
+		result= sim.run();
+		
+		return result;
 	}
 	
 	public List<String> getProdotti(){
@@ -41,6 +44,8 @@ public class Model {
 	}
 
 	public void addLinea(Linea linea) {
-		linee.add(linea);
+		this.linea=linea;
+		
 	}
+
 }

@@ -4,31 +4,34 @@ public class WorkStation {
 	private String nome;
 	
 	private int m;
-	private int te;
-	private int ce;
+	private double te;
+	private double ce;
 	
 	private boolean guasti;
-	private int MfMAX;
-	private int MfMIN;
-	private int MrMAX;
-	private int MrMIN;
-	private int CfMAX;
-	private int CfMIN;
-	private int CrMAX;
-	private int CrMIN;
+	private double MfMAX;
+	private double MfMIN;
+	private double MrMAX;
+	private double MrMIN;
+	
+	private double CfMAX;
+	private double CfMIN;
+	private double CrMAX;
+	private double CrMIN;
 	
 	private boolean setup;
-	private int NsMAX;
-	private int NsMIN;
-	private int TsMAX;
-	private int TsMIN;
-	private int CsMAX;
-	private int CsMIN;
+	private double NsMAX;
+	private double NsMIN;
+	private double TsMAX;
+	private double TsMIN;
+	
+	private double CsMAX;
+	private double CsMIN;
 	
 	
 	private boolean rilavorazioni;
-	private float pMAX;
-	private float pMIN;
+	
+	private double pMAX;
+	private double pMIN;
 	
 	
 	
@@ -36,7 +39,7 @@ public class WorkStation {
 	
 	
 	
-	public WorkStation(String nome, int m, int t0, int c0) {
+	public WorkStation(String nome,  double t0, double c0, int m) {
 		this.nome=nome;
 		this.m = m;
 		this.te = t0;
@@ -63,7 +66,7 @@ public class WorkStation {
 
 
 
-	public int getTe() {
+	public double getTe() {
 		return te;
 	}
 
@@ -73,7 +76,7 @@ public class WorkStation {
 
 
 
-	public int getCe() {
+	public double getCe() {
 		return ce;
 	}
 
@@ -163,7 +166,7 @@ public class WorkStation {
 
 
 
-	public int getMfMAX() {
+	public double getMfMAX() {
 		return MfMAX;
 	}
 
@@ -183,7 +186,7 @@ public class WorkStation {
 
 
 
-	public int getMfMIN() {
+	public double getMfMIN() {
 		return MfMIN;
 	}
 
@@ -203,7 +206,7 @@ public class WorkStation {
 
 
 
-	public int getMrMAX() {
+	public double getMrMAX() {
 		return MrMAX;
 	}
 
@@ -223,7 +226,7 @@ public class WorkStation {
 
 
 
-	public int getMrMIN() {
+	public double getMrMIN() {
 		return MrMIN;
 	}
 
@@ -243,7 +246,7 @@ public class WorkStation {
 
 
 
-	public int getCfMAX() {
+	public double getCfMAX() {
 		return CfMAX;
 	}
 
@@ -253,8 +256,8 @@ public class WorkStation {
 
 
 
-	public void setCfMAX(int cfMAX) {
-		CfMAX = cfMAX;
+	public void setCfMAX(double d) {
+		CfMAX = d;
 	}
 
 
@@ -263,7 +266,7 @@ public class WorkStation {
 
 
 
-	public int getCfMIN() {
+	public double getCfMIN() {
 		return CfMIN;
 	}
 
@@ -273,8 +276,8 @@ public class WorkStation {
 
 
 
-	public void setCfMIN(int cfMIN) {
-		CfMIN = cfMIN;
+	public void setCfMIN(double d) {
+		CfMIN = d;
 	}
 
 
@@ -283,7 +286,7 @@ public class WorkStation {
 
 
 
-	public int getCrMAX() {
+	public double getCrMAX() {
 		return CrMAX;
 	}
 
@@ -293,8 +296,8 @@ public class WorkStation {
 
 
 
-	public void setCrMAX(int crMAX) {
-		CrMAX = crMAX;
+	public void setCrMAX(double d) {
+		CrMAX = d;
 	}
 
 
@@ -303,7 +306,7 @@ public class WorkStation {
 
 
 
-	public int getCrMIN() {
+	public double getCrMIN() {
 		return CrMIN;
 	}
 
@@ -313,8 +316,8 @@ public class WorkStation {
 
 
 
-	public void setCrMIN(int crMIN) {
-		CrMIN = crMIN;
+	public void setCrMIN(double d) {
+		CrMIN = d;
 	}
 
 
@@ -323,7 +326,7 @@ public class WorkStation {
 
 
 
-	public int getNsMAX() {
+	public double getNsMAX() {
 		return NsMAX;
 	}
 
@@ -343,7 +346,7 @@ public class WorkStation {
 
 
 
-	public int getNsMIN() {
+	public double getNsMIN() {
 		return NsMIN;
 	}
 
@@ -363,7 +366,7 @@ public class WorkStation {
 
 
 
-	public int getTsMAX() {
+	public double getTsMAX() {
 		return TsMAX;
 	}
 
@@ -383,7 +386,7 @@ public class WorkStation {
 
 
 
-	public int getTsMIN() {
+	public double getTsMIN() {
 		return TsMIN;
 	}
 
@@ -403,7 +406,7 @@ public class WorkStation {
 
 
 
-	public int getCsMAX() {
+	public double getCsMAX() {
 		return CsMAX;
 	}
 
@@ -413,8 +416,8 @@ public class WorkStation {
 
 
 
-	public void setCsMAX(int csMAX) {
-		CsMAX = csMAX;
+	public void setCsMAX(double d) {
+		CsMAX = d;
 	}
 
 
@@ -423,7 +426,7 @@ public class WorkStation {
 
 
 
-	public int getCsMIN() {
+	public double getCsMIN() {
 		return CsMIN;
 	}
 
@@ -433,8 +436,8 @@ public class WorkStation {
 
 
 
-	public void setCsMIN(int csMIN) {
-		CsMIN = csMIN;
+	public void setCsMIN(double d) {
+		CsMIN = d;
 	}
 
 
@@ -443,7 +446,7 @@ public class WorkStation {
 
 
 
-	public float getpMAX() {
+	public double getpMAX() {
 		return pMAX;
 	}
 
@@ -453,8 +456,8 @@ public class WorkStation {
 
 
 
-	public void setpMAX(float pMAX) {
-		this.pMAX = pMAX;
+	public void setpMAX(double d) {
+		this.pMAX = d;
 	}
 
 
@@ -463,7 +466,7 @@ public class WorkStation {
 
 
 
-	public float getpMIN() {
+	public double getpMIN() {
 		return pMIN;
 	}
 
@@ -473,8 +476,8 @@ public class WorkStation {
 
 
 
-	public void setpMIN(float pMIN) {
-		this.pMIN = pMIN;
+	public void setpMIN(double d) {
+		this.pMIN = d;
 	}
 
 

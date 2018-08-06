@@ -5,8 +5,6 @@
 package controller;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -21,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import model.Linea;
 import model.Model;
+import model.SimResult;
 import model.WorkStation;
 
 public class Controller {
@@ -162,16 +161,12 @@ public class Controller {
     private Button ottimizza; // Value injected by FXMLLoader
 
     @FXML // fx:id="result"
-    private TextArea result; // Value injected by FXMLLoader
+    private TextArea txtResult; // Value injected by FXMLLoader
     
     @FXML // fx:id="comboProdotto"
     private ComboBox<String> comboProdotto; // Value injected by FXMLLoader
 
-    @FXML // fx:id="comboLinea"
-    private ComboBox<Linea> comboLinea; // Value injected by FXMLLoader
-    
-    @FXML // fx:id="txtNomeLinea"
-    private TextField txtNomeLinea; // Value injected by FXMLLoader
+ 
 
     @FXML
     void aggiungiWs(ActionEvent event) {
@@ -182,13 +177,12 @@ public class Controller {
 
     @FXML
     void creaLinea(ActionEvent event) {
-    	linea.setNome(txtNomeLinea.getText());
+    	
     	model.addLinea(linea);
-    	comboLinea.getItems().add(linea);
     	hA.setDisable(false);
     	hB.setDisable(false);
     	hC.setDisable(false);
-    	result.setDisable(false);
+    	txtResult.setDisable(false);
     	
 
     }
@@ -196,8 +190,8 @@ public class Controller {
     @FXML
     void creaWS(ActionEvent event) {
     	String nome=nameWS.getText();
-    	int t=Integer.parseInt(t0.getText());//ipotizzo valori in secondi
-    	int c=Integer.parseInt(c0.getText());
+    	double t=Double.parseDouble(t0.getText());//ipotizzo valori in secondi
+    	double c=Double.parseDouble(c0.getText());
     	int macchine=Integer.parseInt(m.getText());
     	
     	WorkStation ws=new WorkStation(nome,t,c, macchine);
@@ -209,10 +203,11 @@ public class Controller {
     		ws.setMfMIN(Integer.parseInt(minMf.getText()));
     		ws.setMrMAX(Integer.parseInt(maxMr.getText()));
     		ws.setMrMIN(Integer.parseInt(maxMr.getText()));
-    		ws.setCfMAX(Integer.parseInt(MaxCf.getText()));
-    		ws.setCfMIN(Integer.parseInt(minCf.getText()));
-    		ws.setCrMAX(Integer.parseInt(maxCr.getText()));
-    		ws.setCrMIN(Integer.parseInt(minCr.getText()));
+    		
+    		ws.setCfMAX(Double.parseDouble(MaxCf.getText()));
+    		ws.setCfMIN(Double.parseDouble(minCf.getText()));
+    		ws.setCrMAX(Double.parseDouble(maxCr.getText()));
+    		ws.setCrMIN(Double.parseDouble(minCr.getText()));
     	}
     	
     	if(check2.isSelected())
@@ -222,15 +217,17 @@ public class Controller {
     		ws.setNsMIN(Integer.parseInt(minNs.getText()));
     		ws.setTsMAX(Integer.parseInt(maxTs.getText()));
     		ws.setTsMIN(Integer.parseInt(minTs.getText()));
-    		ws.setCsMAX(Integer.parseInt(maxCs.getText()));
-    		ws.setCsMIN(Integer.parseInt(minCs.getText()));
+    		
+    		ws.setCsMAX(Double.parseDouble(maxCs.getText()));
+    		ws.setCsMIN(Double.parseDouble(minCs.getText()));
     	}
     	
     	if(check3.isSelected())
     	{
     		ws.setRilavorazioni(true);
-    		ws.setpMAX(Integer.parseInt(maxP.getText()));
-    		ws.setpMIN(Integer.parseInt(minP.getText()));
+    		
+    		ws.setpMAX(Double.parseDouble(maxP.getText()));
+    		ws.setpMIN(Double.parseDouble(minP.getText()));
     	
     	}
     	
@@ -248,6 +245,15 @@ public class Controller {
     
     @FXML
     void simulazione(ActionEvent event) {
+    	String prodotto= comboProdotto.getValue();
+    	
+    	SimResult result= model.simula(prodotto, linea);
+    	
+    	if(result == null)
+    		txtResult.setText("Tutto ok");
+    	else {
+    		txtResult.setText("Utilizzazione maggiore di 1 alla ws"+result.getWsUOver1()+" in data "+result.getDataUOver1());
+    	}
 
     }
     
@@ -259,7 +265,7 @@ public class Controller {
     	hA.setDisable(true);
     	hB.setDisable(true);
     	hC.setDisable(true);
-    	result.setDisable(true);
+    	txtResult.setDisable(true);
     	
     	
 
@@ -356,11 +362,8 @@ public class Controller {
         assert creaLinea != null : "fx:id=\"creaLinea\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
         assert simulazione != null : "fx:id=\"simulazione\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
         assert ottimizza != null : "fx:id=\"ottimizza\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
-        assert result != null : "fx:id=\"result\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
+        assert txtResult != null : "fx:id=\"result\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
         assert comboProdotto != null : "fx:id=\"comboProdotto\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
-        assert comboLinea != null : "fx:id=\"comboLinea\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
-        assert txtNomeLinea != null : "fx:id=\"txtNomeLinea\" was not injected: check your FXML file 'InterfacciaGrafica.fxml'.";
-
 
     }
     

@@ -332,11 +332,6 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <TextField fx:id="txtNomeLinea" promptText="Nome linea">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </TextField>
                   <Button fx:id="creaLinea" mnemonicParsing="false" onAction="#creaLinea" text="Crea linea">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -354,11 +349,6 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </ComboBox>
-                  <ComboBox fx:id="comboLinea" prefWidth="150.0" promptText="Linea da simulare">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin>
-                  </ComboBox>
                   <Button fx:id="simulazione" mnemonicParsing="false" onAction="#simulazione" text="Simulazione linea">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -371,7 +361,7 @@
                   </Button>
                </children>
             </HBox>
-            <TextArea fx:id="result" prefHeight="200.0" prefWidth="200.0">
+            <TextArea fx:id="txtResult" prefHeight="200.0" prefWidth="200.0">
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>

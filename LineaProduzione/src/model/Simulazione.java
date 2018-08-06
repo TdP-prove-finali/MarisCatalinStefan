@@ -39,33 +39,44 @@ public class Simulazione {
 	
 	
 	
-	public void run() {
+	public SimResult run() {
 		
        Domanda d;
+       SimResult result = null;
 	while((d = queue.poll()) != null)  {
-		processDemand(d);
-	}  
+		 result= processDemand(d);
+		 
+		 if(result != null && result.isuOver1()) 
+			 break;
+	} 
+	
+	return result;
 
 	}
 
 
      //suppongo linea che lavori 24/24 h
-	private void processDemand(Domanda d) {
+	private SimResult processDemand(Domanda d) {
+		System.out.println("Giorno "+d.getData()+"\n");
 		
-		double tassoDiArrivo=d.getQuantita()/24;
+		double ra=((double)d.getQuantita())/(24*60*60); //tasso di arrivo al secondo
 		double ca=1; //suppongo tasso arrivo mediamente variabile
 		
 		for(WorkStation ws:linea.getListaWS()) {
+			System.out.println("Worksation: "+ws.toString()+" ");
 			
 			double te=ws.getTe();
 			double ce=ws.getCe();
 			int m=ws.getM();
 			
+			System.out.println("Parametri: te= "+te+" ce= "+ce+" m= "+m+"\n");
+			
 			//scelgo parametri peggiori per simulazione semplice
 			
 			if(ws.isGuasti()) {
+			
 				
-				float A = (ws.getMfMIN())/(ws.getMfMIN()+ws.getMrMAX());
+				double A = (ws.getMfMIN())/(ws.getMfMIN()+ws.getMrMAX());
 				double t0=te;
 				te=t0/A;
 				
@@ -79,7 +90,7 @@ public class Simulazione {
 			}
 			
 			if(ws.isSetup()) {
-				
+			
 				double t0= te;
 				
 				te= t0+(ws.getTsMAX()/ws.getNsMIN());
@@ -99,6 +110,8 @@ public class Simulazione {
 			
 			if(ws.isRilavorazioni()) {
 				
+		
+				
 				double t0= te;
 				
 				te= t0/(1-ws.getpMAX());
@@ -110,7 +123,38 @@ public class Simulazione {
 				
 			}
 			
+			// suppongo di inserire parametri in secondi
+			
+			double u= (ra*te)/m;
+			System.out.println("Tasso di arrivo: "+ra+"\n");
+			System.out.println("Tempo di processo: "+te+"\n");
+			System.out.println("Utilizzazione: "+u+"\n");
+			
+			if(u>1) {
+				//situazione di eccessivo input di materiale, la linea è in overflow
+				return new SimResult(true,ws,d.getData());
+			}
+			else {
+				//situazione positiva, bisogna valutare la variabilità in uscita generata dalla workstation attuale
+				
+				if(m==1) {
+					ca= Math.sqrt((u*u*ce*ce) + (1-u*u)*(ca*ca));
+				}
+				else if(m > 1) {
+					
+					double a= (1-u*u)*(ca*ca -1);
+					double b= (u*u)/(Math.sqrt(m));
+					double c= (ce*ce -1);
+					
+					ca= 1 + a + b*c;
+				}
+				
+			}
+			
 		}
+		
+		
+		return null;
 		
 	}
 
