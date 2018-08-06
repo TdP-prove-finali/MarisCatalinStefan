@@ -22,16 +22,25 @@ public class Model {
 	
 	public SimResult simula(String prodotto, Linea linea) {
 		
-		SimResult result= null;
+		
 		
 		domande=dao.getDomande(prodotto);
 		Simulazione sim=new Simulazione(domande,linea);
 		sim.init();
-		result= sim.run();
-		
+		SimResult result=sim.run();
+		int countOverPWC=this.benchmark(linea,result.getPrestazioni()) ;
 		return result;
 	}
 	
+	private int benchmark(Linea linea, List<Prestazioni> prestazioni) {
+		//fai benchmark
+		
+		
+		
+		
+		return 0;
+	}
+
 	public List<String> getProdotti(){
 		return dao.getProdotti();
 	}

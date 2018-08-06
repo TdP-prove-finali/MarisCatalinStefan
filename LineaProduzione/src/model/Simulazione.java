@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -14,7 +15,9 @@ public class Simulazione {
 	private Linea linea;
 	
 	//modello del mondo
-	HashMap<Domanda,List<Float>> diagnosiU;
+	private HashMap<WorkStation,List<DiagnosiU>> diagnosiU;
+	private List<Prestazioni> listaPrestazioni;
+	
 	
 	
 	
@@ -29,10 +32,15 @@ public class Simulazione {
 
 	public void init() {
 		diagnosiU=new HashMap<>();
+		listaPrestazioni= new ArrayList<>();
 		queue=new PriorityQueue<>();
 		
 		for(Domanda d:domande) {
 			queue.add(d);
+		}
+		
+		for(WorkStation ws:linea.getListaWS()) {
+			diagnosiU.put(ws, new ArrayList<>());
 		}
 		
 	}
@@ -44,19 +52,18 @@ public class Simulazione {
        Domanda d;
        SimResult result = null;
 	while((d = queue.poll()) != null)  {
-		 result= processDemand(d);
-		 
-		 if(result != null && result.isuOver1()) 
-			 break;
+		 processDemand(d);
 	} 
 	
-	return result;
+	return new SimResult(diagnosiU, listaPrestazioni);
 
 	}
 
 
      //suppongo linea che lavori 24/24 h
-	private SimResult processDemand(Domanda d) {
+	private void processDemand(Domanda d) {
+		Prestazioni prestazioni=new Prestazioni(d.getData());
+		
 		System.out.println("Giorno "+d.getData()+"\n");
 		
 		double ra=((double)d.getQuantita())/(24*60*60); //tasso di arrivo al secondo
@@ -72,6 +79,7 @@ public class Simulazione {
 			System.out.println("Parametri: te= "+te+" ce= "+ce+" m= "+m+"\n");
 			
 			//scelgo parametri peggiori per simulazione semplice
+			//l'ordine di applicazioni delle variazioni è questo (supposizione)
 			
 			if(ws.isGuasti()) {
 			
@@ -123,19 +131,43 @@ public class Simulazione {
 				
 			}
 			
+			System.out.println("Variabilità di processo: "+ce+"\n");
+			
 			// suppongo di inserire parametri in secondi
 			
 			double u= (ra*te)/m;
+			
+			
+			// aggiorno elenco utilizzazioni
+			List<DiagnosiU> temp=diagnosiU.get(ws);
+			temp.add(new DiagnosiU(ws, d.getData(), u));
+			diagnosiU.put(ws, temp);
+			
 			System.out.println("Tasso di arrivo: "+ra+"\n");
 			System.out.println("Tempo di processo: "+te+"\n");
 			System.out.println("Utilizzazione: "+u+"\n");
 			
-			if(u>1) {
-				//situazione di eccessivo input di materiale, la linea è in overflow
-				return new SimResult(true,ws,d.getData());
-			}
-			else {
-				//situazione positiva, bisogna valutare la variabilità in uscita generata dalla workstation attuale
+			//calcolo le prestazioni parziali della singola workstation con la formula più generale possibile
+			
+			//CT
+			double x= ((ca*ca)+(ce*ce))/2;
+			double y= (Math.sqrt(2*(m+1)))-1;
+			double y2= Math.pow(u, y);
+			double z= m*(1-u);
+			
+			double CTq=x*(y2/z)*te;
+			double CT= CTq+te;
+			
+			//TH
+			double TH= ra;
+			
+			//WIP
+			double WIP= CT*TH;
+			
+			prestazioni.setCycleTime(CT);
+			prestazioni.setWorkInProcess(WIP);
+			
+			//bisogna ricalcolare la variabilità in uscita (e quindi in entrata per la prossima ws) generata dalla workstation attuale
 				
 				if(m==1) {
 					ca= Math.sqrt((u*u*ce*ce) + (1-u*u)*(ca*ca));
@@ -149,12 +181,14 @@ public class Simulazione {
 					ca= 1 + a + b*c;
 				}
 				
-			}
+				System.out.println("Variabilità in uscita: "+ ca +"\n");
+				
+				
 			
 		}
 		
-		
-		return null;
+		 
+		listaPrestazioni.add(prestazioni);
 		
 	}
 

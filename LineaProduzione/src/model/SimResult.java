@@ -1,31 +1,39 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
 
 public class SimResult {
 	
-	private boolean uOver1;
-	private WorkStation wsUOver1;
-	private LocalDate dataUOver1;
+
 	
-	public SimResult(boolean uOver1, WorkStation wsUOver1, LocalDate dataUOver1) {
+	private HashMap<WorkStation,List<DiagnosiU>> diagnosiU;
+	private List<Prestazioni> prestazioni;
+
+	
+	public SimResult(HashMap<WorkStation, List<DiagnosiU>> diagnosiU, List<Prestazioni> prestazioni) {
 		
-		this.uOver1 = uOver1;
-		this.wsUOver1 = wsUOver1;
-		this.dataUOver1 = dataUOver1;
+		this.diagnosiU = diagnosiU;
+		this.prestazioni=prestazioni;
 	}
 
-	public boolean isuOver1() {
-		return uOver1;
+
+
+	public HashMap<WorkStation, List<DiagnosiU>> getDiagnosiU() {
+		return diagnosiU;
 	}
 
-	public WorkStation getWsUOver1() {
-		return wsUOver1;
-	}
 
-	public LocalDate getDataUOver1() {
-		return dataUOver1;
+
+	public List<Prestazioni> getPrestazioni() {
+		return prestazioni;
 	}
+	
+	
+
+
+
 	
 	
 	

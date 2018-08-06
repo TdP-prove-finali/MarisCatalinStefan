@@ -5,6 +5,9 @@
 package controller;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -17,6 +20,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import model.DiagnosiU;
+import model.Domanda;
 import model.Linea;
 import model.Model;
 import model.SimResult;
@@ -245,15 +250,34 @@ public class Controller {
     
     @FXML
     void simulazione(ActionEvent event) {
+    	txtResult.clear();
     	String prodotto= comboProdotto.getValue();
     	
-    	SimResult result= model.simula(prodotto, linea);
+    	SimResult res= model.simula(prodotto, linea);
     	
-    	if(result == null)
-    		txtResult.setText("Tutto ok");
-    	else {
-    		txtResult.setText("Utilizzazione maggiore di 1 alla ws"+result.getWsUOver1()+" in data "+result.getDataUOver1());
-    	}
+    	/*List<DiagnosiU> diagnosi= new ArrayList<>();
+		for(Domanda d: res.getDiagnosiU().keySet()) {
+			for(DiagnosiU du: res.getDiagnosiU().get(d)) {
+                if(du.getUtilizzazione()>1) {
+                	diagnosi.add(du);
+                }
+                
+                if(du.getUtilizzazione()<0.40)
+                	diagnosi.add(du);
+			}
+		}
+		Collections.sort(diagnosi);
+		txtResult.appendText("Criticità: \n");
+		for(DiagnosiU du: diagnosi) {
+			if(du.getUtilizzazione()>1)
+				txtResult.appendText("Utilizzazione di valore maggiore di 1 ("+du.getUtilizzazione()+") in data "+du.getData()+" alla workstation "+du.getWs()+"\n");
+			else
+				txtResult.appendText("Scarsa utilizzazione ("+du.getUtilizzazione()+") in data "+du.getData()+" alla workstation "+du.getWs()+"\n");
+				
+		}
+
+    	*/
+    	
 
     }
     
