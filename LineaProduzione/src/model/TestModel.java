@@ -1,9 +1,7 @@
 package model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 
 public class TestModel {
 
@@ -12,17 +10,17 @@ public class TestModel {
 		
 		Linea linea= new Linea();
 		
-		WorkStation ws1= new WorkStation("ws1", 80, 1.3, 1);
+		WorkStation ws1= new WorkStation("ws1", 27, 0.0, 1);
 		
-		WorkStation ws2= new WorkStation("ws2", 15, 1.3, 1);
+		WorkStation ws2= new WorkStation("ws2", 27, 0.0, 1);
 		
 		ws1.setSetup(true);
-		ws1.setNsMAX(12);
-		ws1.setNsMIN(10);
-		ws1.setTsMAX(12);
-		ws1.setTsMIN(10);
-		ws1.setCsMAX(1.4);
-		ws1.setCsMIN(1.3);
+		ws1.setNsMAX(30);
+		ws1.setNsMIN(29);
+		ws1.setTsMAX(2.5);
+		ws1.setTsMIN(2);
+		ws1.setCsMAX(0.6);
+		ws1.setCsMIN(0.5);
 		
 		linea.addWS(ws1);
 		linea.addWS(ws2);
@@ -36,6 +34,7 @@ public class TestModel {
 			WorkStation lockWS = null;
 			double lockU = 0;
 			for(DiagnosiU du:res.getDiagnosiU().get(ws)) {
+				
 				if(du.getUtilizzazione()>1) {
 					//ad un certo punto dell'anno si blocca la linea, non è ammissibile
 					lockDay=du.getData();
@@ -56,9 +55,14 @@ public class TestModel {
 			if(media <0.4)
 				System.out.println("La workstation "+ws+" ha un' utilizzazione media troppo bassa ("+media+") \n");
 			}
-			
-			
 		}
+		
+		BenchmarkOutput benchMark=res.getBo();
+		double count2= benchMark.getCountBoth();
+		double countTH= benchMark.getCountTH();
+		double countCT= benchMark.getCountCT();
+		System.out.println("Benchmarking interno: \n la linea è stata al di sotto di THpwc e CTpwc "+count2+" giorni, "
+				+ "solo al di sotto di THpwc "+countTH+" giorni, e solo al di sotto di CTpwc "+countCT+" giorni");
 
 	}
 

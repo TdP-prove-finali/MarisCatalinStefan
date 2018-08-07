@@ -26,6 +26,10 @@ public class Prestazioni {
 	public double getCycleTime() {
 		return cycleTime;
 	}
+	
+	public double getThroughput() {
+		return workInProcess/cycleTime;
+	}
 
 	public LocalDate getData() {
 		return data;
@@ -36,7 +40,7 @@ public class Prestazioni {
 	}
 
 	public void setWorkInProcess(double workInProcess) {
-		this.workInProcess =this.workInProcess+ workInProcess;
+		this.workInProcess =this.workInProcess + workInProcess;
 	}
 	
 	

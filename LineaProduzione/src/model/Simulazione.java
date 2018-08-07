@@ -52,7 +52,12 @@ public class Simulazione {
        Domanda d;
        SimResult result = null;
 	while((d = queue.poll()) != null)  {
-		 processDemand(d);
+		boolean x= processDemand(d);
+		if(!x) {
+			System.out.println("Utilizzazione eccessiva!!!!!!! \n");
+			break;
+			
+		}
 	} 
 	
 	return new SimResult(diagnosiU, listaPrestazioni);
@@ -61,7 +66,7 @@ public class Simulazione {
 
 
      //suppongo linea che lavori 24/24 h
-	private void processDemand(Domanda d) {
+	private boolean processDemand(Domanda d) {
 		Prestazioni prestazioni=new Prestazioni(d.getData());
 		
 		System.out.println("Giorno "+d.getData()+"\n");
@@ -76,7 +81,7 @@ public class Simulazione {
 			double ce=ws.getCe();
 			int m=ws.getM();
 			
-			System.out.println("Parametri: te= "+te+" ce= "+ce+" m= "+m+"\n");
+			//System.out.println("Parametri: te= "+te+" ce= "+ce+" m= "+m+"\n");
 			
 			//scelgo parametri peggiori per simulazione semplice
 			//l'ordine di applicazioni delle variazioni è questo (supposizione)
@@ -138,10 +143,15 @@ public class Simulazione {
 			double u= (ra*te)/m;
 			
 			
+			
+			
 			// aggiorno elenco utilizzazioni
 			List<DiagnosiU> temp=diagnosiU.get(ws);
 			temp.add(new DiagnosiU(ws, d.getData(), u));
 			diagnosiU.put(ws, temp);
+			
+			if(u>1)
+				return false; // perchè si blocca la linea
 			
 			System.out.println("Tasso di arrivo: "+ra+"\n");
 			System.out.println("Tempo di processo: "+te+"\n");
@@ -157,12 +167,15 @@ public class Simulazione {
 			
 			double CTq=x*(y2/z)*te;
 			double CT= CTq+te;
+			System.out.println("CT: "+CT+"\n");
 			
 			//TH
 			double TH= ra;
+			System.out.println("TH: "+TH+"\n");
 			
 			//WIP
 			double WIP= CT*TH;
+			System.out.println("WIP: "+WIP+"\n");
 			
 			prestazioni.setCycleTime(CT);
 			prestazioni.setWorkInProcess(WIP);
@@ -189,6 +202,7 @@ public class Simulazione {
 		
 		 
 		listaPrestazioni.add(prestazioni);
+		return true;
 		
 	}
 

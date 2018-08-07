@@ -176,7 +176,7 @@ public class WorkStation {
 
 
 
-	public void setMfMAX(int mfMAX) {
+	public void setMfMAX(double mfMAX) {
 		MfMAX = mfMAX;
 	}
 
@@ -196,7 +196,7 @@ public class WorkStation {
 
 
 
-	public void setMfMIN(int mfMIN) {
+	public void setMfMIN(double mfMIN) {
 		MfMIN = mfMIN;
 	}
 
@@ -216,7 +216,7 @@ public class WorkStation {
 
 
 
-	public void setMrMAX(int mrMAX) {
+	public void setMrMAX(double mrMAX) {
 		MrMAX = mrMAX;
 	}
 
@@ -236,7 +236,7 @@ public class WorkStation {
 
 
 
-	public void setMrMIN(int mrMIN) {
+	public void setMrMIN(double mrMIN) {
 		MrMIN = mrMIN;
 	}
 
@@ -336,7 +336,7 @@ public class WorkStation {
 
 
 
-	public void setNsMAX(int nsMAX) {
+	public void setNsMAX(double nsMAX) {
 		NsMAX = nsMAX;
 	}
 
@@ -356,7 +356,7 @@ public class WorkStation {
 
 
 
-	public void setNsMIN(int nsMIN) {
+	public void setNsMIN(double nsMIN) {
 		NsMIN = nsMIN;
 	}
 
@@ -376,8 +376,8 @@ public class WorkStation {
 
 
 
-	public void setTsMAX(int tsMAX) {
-		TsMAX = tsMAX;
+	public void setTsMAX(double d) {
+		TsMAX = d;
 	}
 
 
@@ -396,7 +396,7 @@ public class WorkStation {
 
 
 
-	public void setTsMIN(int tsMIN) {
+	public void setTsMIN(double tsMIN) {
 		TsMIN = tsMIN;
 	}
 
