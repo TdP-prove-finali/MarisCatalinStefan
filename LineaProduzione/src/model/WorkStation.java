@@ -7,35 +7,43 @@ public class WorkStation {
 	private double te;
 	private double ce;
 	
+	
 	private boolean guasti;
+	
 	private double MfMAX;
+	private double currentMf;
 	private double MfMIN;
 	private double MrMAX;
+	private double currentMr;
 	private double MrMIN;
 	
 	private double CfMAX;
+	private double currentCf;
 	private double CfMIN;
 	private double CrMAX;
+	private double currentCr;
 	private double CrMIN;
 	
+	
 	private boolean setup;
+	
 	private double NsMAX;
+	private double currentNs;
 	private double NsMIN;
 	private double TsMAX;
+	private double currentTs;
 	private double TsMIN;
 	
 	private double CsMAX;
+	private double currentCs;
 	private double CsMIN;
 	
 	
 	private boolean rilavorazioni;
 	
 	private double pMAX;
+	private double currentP;
 	private double pMIN;
-	
-	
-	
-	
 	
 	
 	
@@ -48,11 +56,165 @@ public class WorkStation {
 		guasti=false;
 		setup=false;
 		rilavorazioni=false;
+		
+		
+	}
+	
+	
+	
+	public double getCurrentMf() {
+		return currentMf;
 	}
 
 
 
 
+
+
+
+	public void setCurrentMf(double currentMf) {
+		this.currentMf = currentMf;
+	}
+
+
+
+
+
+
+
+	public double getCurrentMr() {
+		return currentMr;
+	}
+
+
+
+
+
+
+
+	public void setCurrentMr(double currentMr) {
+		this.currentMr = currentMr;
+	}
+
+
+
+
+
+
+
+	public double getCurrentCf() {
+		return currentCf;
+	}
+
+
+
+
+
+
+
+	public void setCurrentCf(double currentCf) {
+		this.currentCf = currentCf;
+	}
+
+
+
+
+
+
+
+	public double getCurrentCr() {
+		return currentCr;
+	}
+
+
+
+
+
+
+
+	public void setCurrentCr(double currentCr) {
+		this.currentCr = currentCr;
+	}
+
+
+
+
+
+
+
+	public double getCurrentNs() {
+		return currentNs;
+	}
+
+
+
+
+
+
+
+	public void setCurrentNs(double currentNs) {
+		this.currentNs = currentNs;
+	}
+
+
+
+
+
+
+
+	public double getCurrentTs() {
+		return currentTs;
+	}
+
+
+
+
+
+
+
+	public void setCurrentTs(double currentTs) {
+		this.currentTs = currentTs;
+	}
+
+
+
+
+
+
+
+	public double getCurrentCs() {
+		return currentCs;
+	}
+
+
+
+
+
+
+
+	public void setCurrentCs(double currentCs) {
+		this.currentCs = currentCs;
+	}
+
+
+
+
+
+
+
+	public double getCurrentP() {
+		return currentP;
+	}
+
+
+
+
+
+
+
+	public void setCurrentP(double currentP) {
+		this.currentP = currentP;
+	}
 
 
 

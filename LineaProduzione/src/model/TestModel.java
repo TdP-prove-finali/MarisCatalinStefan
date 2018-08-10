@@ -10,21 +10,22 @@ public class TestModel {
 		
 		Linea linea= new Linea();
 		
-		WorkStation ws1= new WorkStation("ws1", 27, 0.0, 1);
+		WorkStation ws1= new WorkStation("ws1", 28, 0.3, 2);
 		
-		WorkStation ws2= new WorkStation("ws2", 27, 0.0, 1);
+		WorkStation ws2= new WorkStation("ws2", 26, 0.1, 1);
 		
 		ws1.setSetup(true);
 		ws1.setNsMAX(30);
 		ws1.setNsMIN(29);
-		ws1.setTsMAX(2.5);
+		ws1.setTsMAX(10);
 		ws1.setTsMIN(2);
-		ws1.setCsMAX(0.6);
-		ws1.setCsMIN(0.5);
+		ws1.setCsMAX(0.8);
+		ws1.setCsMIN(0.2);
 		
 		linea.addWS(ws1);
 		linea.addWS(ws2);
 		SimResult res= model.simula("P_B", linea);
+		
 		//per individuare criticità valuto valori medi su tutto l'anno
 	
 		for(WorkStation ws: res.getDiagnosiU().keySet()) {
@@ -36,7 +37,9 @@ public class TestModel {
 			for(DiagnosiU du:res.getDiagnosiU().get(ws)) {
 				
 				if(du.getUtilizzazione()>1) {
+					
 					//ad un certo punto dell'anno si blocca la linea, non è ammissibile
+					
 					lockDay=du.getData();
 					lockWS=du.getWs();
 					lockU=du.getUtilizzazione();

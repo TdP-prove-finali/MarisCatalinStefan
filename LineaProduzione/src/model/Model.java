@@ -22,6 +22,29 @@ public class Model {
 	
 	public SimResult simula(String prodotto, Linea linea) {
 		
+		//setto come valori dei parametri current i valori peggiori
+		
+		for(WorkStation ws: linea.getListaWS()) {
+			
+			if(ws.isGuasti()) {
+				ws.setCurrentMf(ws.getMfMIN());
+				ws.setCurrentMr(ws.getMrMAX());
+				ws.setCurrentCf(ws.getCfMAX());
+				ws.setCurrentCr(ws.getCrMAX());
+			}
+			
+			if(ws.isSetup()) {
+				ws.setCurrentNs(ws.getNsMIN());
+				ws.setCurrentTs(ws.getTsMAX());
+				ws.setCurrentCs(ws.getCsMAX());
+			}
+			
+			if(ws.isRilavorazioni()) {
+				ws.setCurrentP(ws.getpMAX());
+			}
+			
+			
+		}
 		
 		domande=dao.getDomande(prodotto);
 		Simulazione sim=new Simulazione(domande,linea);
@@ -30,9 +53,11 @@ public class Model {
 		BenchmarkOutput countOverPWC=this.benchmark(linea,result.getPrestazioni());
 		result.setBo(countOverPWC);
 		return result;
+		
 	}
 	
 	private BenchmarkOutput benchmark(Linea linea, List<Prestazioni> prestazioni) {
+		
 		int countBOTH=0;
 		int countTH=0;
 		int countCT=0;
@@ -59,6 +84,7 @@ public class Model {
 	}
 	
 	private double THpwc(double wip, Linea linea) {
+		
 		double W0= this.getCriticalWIP(linea);
 		double a= W0+wip-1;
 		double rb= this.getBottleneckRate(linea);
@@ -70,6 +96,7 @@ public class Model {
 	}
 	
     private double CTpwc(double wip, Linea linea) {
+    	
     	double a= wip-1;
     	double rb= this.getBottleneckRate(linea);
     	double T0= this.getRawProcessTime(linea);
@@ -126,6 +153,7 @@ public class Model {
 	
 
 	public List<String> getProdotti(){
+		
 		return dao.getProdotti();
 	}
 	
@@ -137,7 +165,42 @@ public class Model {
 	}
 
 	public void addLinea(Linea linea) {
+		
 		this.linea=linea;
+		
+	}
+	
+	public void ottimizza(String prodotto, Linea linea) {
+		
+		double counter=0;
+		
+      for(WorkStation ws: linea.getListaWS()) {
+			
+			if(ws.isGuasti()) {
+				ws.setCurrentMf(ws.getMfMIN());
+				ws.setCurrentMr(ws.getMrMIN());
+				ws.setCurrentCf(ws.getCfMIN());
+				ws.setCurrentCr(ws.getCrMIN());
+			}
+			
+			if(ws.isSetup()) {
+				ws.setCurrentNs(ws.getNsMIN());
+				ws.setCurrentTs(ws.getTsMIN());
+				ws.setCurrentCs(ws.getCsMIN());
+			}
+			
+			if(ws.isRilavorazioni()) {
+				ws.setCurrentP(ws.getpMIN());
+			}	
+		}
+      
+      
+      
+    
+    
+		
+		
+		
 		
 	}
 

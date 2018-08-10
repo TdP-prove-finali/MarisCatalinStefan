@@ -5,6 +5,7 @@
 package controller;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import model.BenchmarkOutput;
 import model.DiagnosiU;
 import model.Domanda;
 import model.Linea;
@@ -175,13 +177,15 @@ public class Controller {
 
     @FXML
     void aggiungiWs(ActionEvent event) {
-    	
-    	linea.addWS(wss.getSelectionModel().getSelectedItem());
+    	WorkStation ws= wss.getSelectionModel().getSelectedItem();
+    	linea.addWS(ws);
+    	txtResult.setText("Aggiunta workstation "+ws+" alla linea");
     }
     
 
     @FXML
     void creaLinea(ActionEvent event) {
+    	txtResult.setText("Linea creata");
     	
     	model.addLinea(linea);
     	hA.setDisable(false);
@@ -237,6 +241,15 @@ public class Controller {
     	}
     	
     	wss.setItems(FXCollections.observableArrayList(model.addWS(ws)));
+    	
+    	nameWS.clear();
+    	t0.clear();
+    	c0.clear();
+    	m.clear();
+    	check1.setSelected(false);
+    	check2.setSelected(false);
+    	check3.setSelected(false);
+    	
 
     }
 
@@ -255,28 +268,50 @@ public class Controller {
     	
     	SimResult res= model.simula(prodotto, linea);
     	
-    	/*List<DiagnosiU> diagnosi= new ArrayList<>();
-		for(Domanda d: res.getDiagnosiU().keySet()) {
-			for(DiagnosiU du: res.getDiagnosiU().get(d)) {
-                if(du.getUtilizzazione()>1) {
-                	diagnosi.add(du);
-                }
-                
-                if(du.getUtilizzazione()<0.40)
-                	diagnosi.add(du);
+    	for(WorkStation ws: res.getDiagnosiU().keySet()) {
+			boolean flag=false;
+			double somma=0;
+			LocalDate lockDay = null;
+			WorkStation lockWS = null;
+			double lockU = 0;
+			for(DiagnosiU du:res.getDiagnosiU().get(ws)) {
+				
+				if(du.getUtilizzazione()>1) {
+					
+					//ad un certo punto dell'anno si blocca la linea, non è ammissibile
+					
+					lockDay=du.getData();
+					lockWS=du.getWs();
+					lockU=du.getUtilizzazione();
+					flag=true;
+					break;
+				}
+				somma+=du.getUtilizzazione();
+			}
+			
+			if(flag) {
+				//System.out.println("Si verifica un blocco il giorno "+lockDay+" alla workstation "+lockWS +" per via di una u di "+lockU+"\n");
+				txtResult.setText("Si verifica un blocco il giorno "+lockDay+" alla workstation "+lockWS +" per via di una u di "+lockU+"\n");
+				break;
+			}
+			else {
+			double media= somma/res.getDiagnosiU().get(ws).size();
+			if(media <0.4) {
+				txtResult.setText("La workstation "+ws+" ha un' utilizzazione media troppo bassa ("+media+") \n");
+				//System.out.println("La workstation "+ws+" ha un' utilizzazione media troppo bassa ("+media+") \n");
+			}
 			}
 		}
-		Collections.sort(diagnosi);
-		txtResult.appendText("Criticità: \n");
-		for(DiagnosiU du: diagnosi) {
-			if(du.getUtilizzazione()>1)
-				txtResult.appendText("Utilizzazione di valore maggiore di 1 ("+du.getUtilizzazione()+") in data "+du.getData()+" alla workstation "+du.getWs()+"\n");
-			else
-				txtResult.appendText("Scarsa utilizzazione ("+du.getUtilizzazione()+") in data "+du.getData()+" alla workstation "+du.getWs()+"\n");
-				
-		}
-
-    	*/
+		
+		BenchmarkOutput benchMark=res.getBo();
+		double count2= benchMark.getCountBoth();
+		double countTH= benchMark.getCountTH();
+		double countCT= benchMark.getCountCT();
+		txtResult.appendText("Benchmarking interno: \n la linea è stata al di sotto di THpwc e CTpwc "+count2+" giorni, "
+				+ "solo al di sotto di THpwc "+countTH+" giorni, e solo al di sotto di CTpwc "+countCT+" giorni");
+		
+		/*System.out.println("Benchmarking interno: \n la linea è stata al di sotto di THpwc e CTpwc "+count2+" giorni, "
+				+ "solo al di sotto di THpwc "+countTH+" giorni, e solo al di sotto di CTpwc "+countCT+" giorni");*/
     	
 
     }

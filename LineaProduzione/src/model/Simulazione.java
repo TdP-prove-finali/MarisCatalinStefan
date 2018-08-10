@@ -89,13 +89,13 @@ public class Simulazione {
 			if(ws.isGuasti()) {
 			
 				
-				double A = (ws.getMfMIN())/(ws.getMfMIN()+ws.getMrMAX());
+				double A = (ws.getCurrentMf())/(ws.getCurrentMf()+ws.getCurrentMr());
 				double t0=te;
 				te=t0/A;
 				
 				double a= ce*ce;
-				double b= A*(1-A)*(ws.getMrMAX()/t0);
-				double c= (ws.getCrMAX()*ws.getCrMAX())*A*(1-A)*(ws.getMrMAX()/t0);
+				double b= A*(1-A)*(ws.getCurrentMr()/t0);
+				double c= (ws.getCurrentCr()*ws.getCurrentCr())*A*(1-A)*(ws.getCurrentMr()/t0);
 				
 				ce=Math.sqrt(a+b+c);
 				
@@ -106,14 +106,14 @@ public class Simulazione {
 			
 				double t0= te;
 				
-				te= t0+(ws.getTsMAX()/ws.getNsMIN());
+				te= t0+(ws.getCurrentTs()/ws.getCurrentNs());
 				
 				double s0=  ce*t0;
-				double ss= ws.getCsMAX()*ws.getTsMAX();
+				double ss= ws.getCurrentCs()*ws.getCurrentTs();
 				
 				double a= s0*s0;
-				double b= (ss*ss)/ws.getNsMIN();
-				double c= ((ws.getNsMIN()-1)*(ws.getTsMAX()*ws.getTsMAX()))/(ws.getNsMIN()*ws.getNsMIN());
+				double b= (ss*ss)/ws.getCurrentNs();
+				double c= ((ws.getCurrentNs()-1)*(ws.getCurrentTs()*ws.getCurrentTs()))/(ws.getCurrentNs()*ws.getCurrentNs());
 				
 				double se= Math.sqrt(a+b+c);
 				
@@ -127,10 +127,10 @@ public class Simulazione {
 				
 				double t0= te;
 				
-				te= t0/(1-ws.getpMAX());
+				te= t0/(1-ws.getCurrentP());
 				
 				double a= ce*ce;
-				double b= (1-a)*ws.getpMAX();
+				double b= (1-a)*ws.getCurrentP();
 				
 				ce=Math.sqrt(a+b);
 				
