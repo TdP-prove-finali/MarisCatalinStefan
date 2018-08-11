@@ -5,7 +5,6 @@ import java.util.List;
 
 public class SimResult {
 	
-
 	
 	private HashMap<WorkStation,List<DiagnosiU>> diagnosiU;
 	private List<Prestazioni> prestazioni;

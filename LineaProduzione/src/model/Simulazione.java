@@ -69,13 +69,13 @@ public class Simulazione {
 	private boolean processDemand(Domanda d) {
 		Prestazioni prestazioni=new Prestazioni(d.getData());
 		
-		System.out.println("Giorno "+d.getData()+"\n");
+		//System.out.println("Giorno "+d.getData()+"\n");
 		
 		double ra=((double)d.getQuantita())/(24*60*60); //tasso di arrivo al secondo
 		double ca=1; //suppongo tasso arrivo mediamente variabile
 		
 		for(WorkStation ws:linea.getListaWS()) {
-			System.out.println("Worksation: "+ws.toString()+" ");
+			//System.out.println("Worksation: "+ws.toString()+" ");
 			
 			double te=ws.getTe();
 			double ce=ws.getCe();
@@ -89,13 +89,13 @@ public class Simulazione {
 			if(ws.isGuasti()) {
 			
 				
-				double A = (ws.getCurrentMf())/(ws.getCurrentMf()+ws.getCurrentMr());
+				double A = (ws.getMf().getCurrent())/(ws.getMf().getCurrent()+ws.getMr().getCurrent());
 				double t0=te;
 				te=t0/A;
 				
 				double a= ce*ce;
-				double b= A*(1-A)*(ws.getCurrentMr()/t0);
-				double c= (ws.getCurrentCr()*ws.getCurrentCr())*A*(1-A)*(ws.getCurrentMr()/t0);
+				double b= A*(1-A)*(ws.getMr().getCurrent()/t0);
+				double c= (ws.getCr().getCurrent()*ws.getCr().getCurrent())*A*(1-A)*(ws.getMr().getCurrent()/t0);
 				
 				ce=Math.sqrt(a+b+c);
 				
@@ -106,14 +106,14 @@ public class Simulazione {
 			
 				double t0= te;
 				
-				te= t0+(ws.getCurrentTs()/ws.getCurrentNs());
+				te= t0+(ws.getTs().getCurrent()/ws.getNs().getCurrent());
 				
 				double s0=  ce*t0;
-				double ss= ws.getCurrentCs()*ws.getCurrentTs();
+				double ss= ws.getCs().getCurrent()*ws.getTs().getCurrent();
 				
 				double a= s0*s0;
-				double b= (ss*ss)/ws.getCurrentNs();
-				double c= ((ws.getCurrentNs()-1)*(ws.getCurrentTs()*ws.getCurrentTs()))/(ws.getCurrentNs()*ws.getCurrentNs());
+				double b= (ss*ss)/ws.getNs().getCurrent();
+				double c= ((ws.getNs().getCurrent()-1)*(ws.getTs().getCurrent()*ws.getTs().getCurrent()))/(ws.getNs().getCurrent()*ws.getNs().getCurrent());
 				
 				double se= Math.sqrt(a+b+c);
 				
@@ -127,16 +127,16 @@ public class Simulazione {
 				
 				double t0= te;
 				
-				te= t0/(1-ws.getCurrentP());
+				te= t0/(1-ws.getP().getCurrent());
 				
 				double a= ce*ce;
-				double b= (1-a)*ws.getCurrentP();
+				double b= (1-a)*ws.getP().getCurrent();
 				
 				ce=Math.sqrt(a+b);
 				
 			}
 			
-			System.out.println("Variabilità di processo: "+ce+"\n");
+			//System.out.println("Variabilità di processo: "+ce+"\n");
 			
 			// suppongo di inserire parametri in secondi
 			
@@ -153,9 +153,9 @@ public class Simulazione {
 			if(u>1)
 				return false; // perchè si blocca la linea
 			
-			System.out.println("Tasso di arrivo: "+ra+"\n");
-			System.out.println("Tempo di processo: "+te+"\n");
-			System.out.println("Utilizzazione: "+u+"\n");
+			//System.out.println("Tasso di arrivo: "+ra+"\n");
+			//System.out.println("Tempo di processo: "+te+"\n");
+			//System.out.println("Utilizzazione: "+u+"\n");
 			
 			//calcolo le prestazioni parziali della singola workstation con la formula più generale possibile
 			
@@ -167,15 +167,15 @@ public class Simulazione {
 			
 			double CTq=x*(y2/z)*te;
 			double CT= CTq+te;
-			System.out.println("CT: "+CT+"\n");
+			//System.out.println("CT: "+CT+"\n");
 			
 			//TH
 			double TH= ra;
-			System.out.println("TH: "+TH+"\n");
+			//System.out.println("TH: "+TH+"\n");
 			
 			//WIP
 			double WIP= CT*TH;
-			System.out.println("WIP: "+WIP+"\n");
+			//System.out.println("WIP: "+WIP+"\n");
 			
 			prestazioni.setCycleTime(CT);
 			prestazioni.setWorkInProcess(WIP);
@@ -194,7 +194,7 @@ public class Simulazione {
 					ca= 1 + a + b*c;
 				}
 				
-				System.out.println("Variabilità in uscita: "+ ca +"\n");
+				//System.out.println("Variabilità in uscita: "+ ca +"\n");
 				
 				
 			

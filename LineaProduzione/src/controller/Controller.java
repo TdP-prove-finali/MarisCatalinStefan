@@ -26,6 +26,7 @@ import model.DiagnosiU;
 import model.Domanda;
 import model.Linea;
 import model.Model;
+import model.Parametro;
 import model.SimResult;
 import model.WorkStation;
 
@@ -208,35 +209,30 @@ public class Controller {
     	if(check1.isSelected())
     	{
     		ws.setGuasti(true);
-    		ws.setMfMAX(Integer.parseInt(maxMf.getText()));
-    		ws.setMfMIN(Integer.parseInt(minMf.getText()));
-    		ws.setMrMAX(Integer.parseInt(maxMr.getText()));
-    		ws.setMrMIN(Integer.parseInt(maxMr.getText()));
+    	
+    		ws.setMf(new Parametro("Mf",Double.parseDouble(maxMf.getText()),Double.parseDouble(minMf.getText()), ws ));
+    		ws.setMr(new Parametro("Mr",Double.parseDouble(maxMr.getText()),Double.parseDouble(minMr.getText()), ws ));
+    		ws.setCf(new Parametro("Cf",Double.parseDouble(MaxCf.getText()),Double.parseDouble(minCf.getText()), ws ));
+    		ws.setCr(new Parametro("Cr",Double.parseDouble(maxCr.getText()),Double.parseDouble(minCr.getText()), ws ));
     		
-    		ws.setCfMAX(Double.parseDouble(MaxCf.getText()));
-    		ws.setCfMIN(Double.parseDouble(minCf.getText()));
-    		ws.setCrMAX(Double.parseDouble(maxCr.getText()));
-    		ws.setCrMIN(Double.parseDouble(minCr.getText()));
+    		
     	}
     	
     	if(check2.isSelected())
     	{
     		ws.setSetup(true);
-    		ws.setNsMAX(Integer.parseInt(maxNs.getText()));
-    		ws.setNsMIN(Integer.parseInt(minNs.getText()));
-    		ws.setTsMAX(Integer.parseInt(maxTs.getText()));
-    		ws.setTsMIN(Integer.parseInt(minTs.getText()));
+    		ws.setNs(new Parametro("Ns",Double.parseDouble(maxNs.getText()),Double.parseDouble(minNs.getText()), ws ));
+    		ws.setTs(new Parametro("Ts",Double.parseDouble(maxTs.getText()),Double.parseDouble(minTs.getText()), ws ));
+    		ws.setCs(new Parametro("Cs",Double.parseDouble(maxCs.getText()),Double.parseDouble(minCs.getText()), ws ));
     		
-    		ws.setCsMAX(Double.parseDouble(maxCs.getText()));
-    		ws.setCsMIN(Double.parseDouble(minCs.getText()));
     	}
     	
     	if(check3.isSelected())
     	{
     		ws.setRilavorazioni(true);
     		
-    		ws.setpMAX(Double.parseDouble(maxP.getText()));
-    		ws.setpMIN(Double.parseDouble(minP.getText()));
+    		ws.setP(new Parametro("P",Double.parseDouble(maxP.getText()),Double.parseDouble(minP.getText()), ws ));
+    		
     	
     	}
     	

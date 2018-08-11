@@ -13,6 +13,7 @@ public class Linea {
 		listaWS=new ArrayList<>();
 	}
 	
+	
 	public String getNome() {
 		return nome;
 	}

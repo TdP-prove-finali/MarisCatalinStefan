@@ -18,6 +18,12 @@ public class Model {
 	{
 		listaWS=new ArrayList<>();
 		dao=new Dao();
+		
+		uOttima=0;
+		bothDays=Integer.MAX_VALUE;
+		CTDays=Integer.MAX_VALUE;
+		THDays=Integer.MAX_VALUE;
+		
 	}
 	
 	public SimResult simula(String prodotto, Linea linea) {
@@ -27,23 +33,22 @@ public class Model {
 		for(WorkStation ws: linea.getListaWS()) {
 			
 			if(ws.isGuasti()) {
-				ws.setCurrentMf(ws.getMfMIN());
-				ws.setCurrentMr(ws.getMrMAX());
-				ws.setCurrentCf(ws.getCfMAX());
-				ws.setCurrentCr(ws.getCrMAX());
+				ws.getMf().setCurrent(ws.getMf().getMin());
+				ws.getMr().setCurrent(ws.getMr().getMax());
+				ws.getCf().setCurrent(ws.getCf().getMax());
+				ws.getCf().setCurrent(ws.getCf().getMax());
 			}
 			
 			if(ws.isSetup()) {
-				ws.setCurrentNs(ws.getNsMIN());
-				ws.setCurrentTs(ws.getTsMAX());
-				ws.setCurrentCs(ws.getCsMAX());
+				ws.getNs().setCurrent(ws.getNs().getMin());
+				ws.getTs().setCurrent(ws.getTs().getMax());
+				ws.getCs().setCurrent(ws.getCs().getMax());
 			}
 			
 			if(ws.isRilavorazioni()) {
-				ws.setCurrentP(ws.getpMAX());
+				ws.getP().setCurrent(ws.getP().getMax());
 			}
-			
-			
+				
 		}
 		
 		domande=dao.getDomande(prodotto);
@@ -63,14 +68,14 @@ public class Model {
 		int countCT=0;
 		
 		for(Prestazioni p: prestazioni) {
-			System.out.println("Giorno "+p.getData()+"\n");
+			//System.out.println("Giorno "+p.getData()+"\n");
 			double THpwc= this.THpwc(p.getWorkInProcess(), linea);
 			double CTpwc= this.CTpwc(p.getWorkInProcess(), linea);
 			
 			double TH= p.getThroughput();
 			double CT= p.getCycleTime();
 			
-			System.out.println(TH+"-"+THpwc+"   "+CT+"-"+CTpwc+"\n");
+			//System.out.println(TH+"-"+THpwc+"   "+CT+"-"+CTpwc+"\n");
 			
 			if(TH<THpwc && CT>CTpwc)
 				countBOTH++;
@@ -170,38 +175,150 @@ public class Model {
 		
 	}
 	
-	public void ottimizza(String prodotto, Linea linea) {
+	private OptimizationResult soluzioneOttima;
+	
+	public OptimizationResult ottimizza(String prodotto, Linea linea) {
+			
+		List<Parametro> parametri= new ArrayList<>();
 		
-		double counter=0;
+		 for(WorkStation ws: linea.getListaWS()) {
+				
+				if(ws.isGuasti()) {
+					ws.getMf().setCurrent(ws.getMf().getMin());
+					ws.getMr().setCurrent(ws.getMr().getMin());
+					ws.getCf().setCurrent(ws.getCf().getMin());
+					ws.getCf().setCurrent(ws.getCf().getMin());
+				}
+				
+				if(ws.isSetup()) {
+					ws.getNs().setCurrent(ws.getNs().getMin());
+					ws.getTs().setCurrent(ws.getTs().getMin());
+					ws.getCs().setCurrent(ws.getCs().getMin());
+				}
+				
+				if(ws.isRilavorazioni()) {
+					ws.getP().setCurrent(ws.getP().getMin());
+				}
+					
+			}
 		
-      for(WorkStation ws: linea.getListaWS()) {
-			
-			if(ws.isGuasti()) {
-				ws.setCurrentMf(ws.getMfMIN());
-				ws.setCurrentMr(ws.getMrMIN());
-				ws.setCurrentCf(ws.getCfMIN());
-				ws.setCurrentCr(ws.getCrMIN());
+		 for(WorkStation ws: linea.getListaWS()) {
+				
+				if(ws.isGuasti()) {
+					parametri.add(ws.getMf());
+					parametri.add(ws.getMr());
+					parametri.add(ws.getCf());
+					parametri.add(ws.getCr());
+				}
+				
+				if(ws.isSetup()) {
+					parametri.add(ws.getNs());
+					parametri.add(ws.getTs());
+					parametri.add(ws.getCs());
+				}
+				
+				if(ws.isRilavorazioni()) {
+					parametri.add(ws.getP());
+				}
+					
 			}
+		 
+	
+		 
+       // ricorsione  
+		 List<Parametro> passati=new ArrayList<>();
+		 domande=dao.getDomande(prodotto);
+		 
+		 this.recursive(parametri, passati, linea, domande);
+		 
+		 
+		 return soluzioneOttima;
+		 
+	}
+
+	private void recursive(List<Parametro> parametri, List<Parametro> passati, Linea linea, List<Domanda> domande) {
+		
+		Simulazione sim= new Simulazione(domande, linea);
+		sim.init();
+		SimResult res=sim.run();
+		BenchmarkOutput countOverPWC=this.benchmark(linea,res.getPrestazioni());
+		res.setBo(countOverPWC);
+		
+		if(checkResult(res))
+			soluzioneOttima= new OptimizationResult(res, parametri);
+		
+		
+		List<Parametro> parametriNew=new ArrayList<>(parametri);
+		parametriNew.removeAll(passati);
+		
+		
+		for(Parametro p: parametriNew) {
 			
-			if(ws.isSetup()) {
-				ws.setCurrentNs(ws.getNsMIN());
-				ws.setCurrentTs(ws.getTsMIN());
-				ws.setCurrentCs(ws.getCsMIN());
+			passati.add(p);
+			
+			for(double i=0;i+p.getMin() <= p.getMax(); i=i+0.1) {
+				p.setCurrent(p.getMin()+i);
+				recursive(parametri, passati, linea, domande);
+				p.setCurrent(p.getMin());	
 			}
-			
-			if(ws.isRilavorazioni()) {
-				ws.setCurrentP(ws.getpMIN());
-			}	
 		}
-      
-      
-      
-    
-    
 		
 		
 		
+	}
+	
+	
+
+	private double uOttima;
+	private int bothDays;
+	private int CTDays;
+	private int THDays;
+	
+	private boolean checkResult(SimResult res) {
+		double uMedia=0;
 		
+		for(WorkStation ws: res.getDiagnosiU().keySet()) {
+			boolean flag=false;
+			double somma=0;
+			for(DiagnosiU du:res.getDiagnosiU().get(ws)) {
+				
+				if(du.getUtilizzazione()>1) {
+					//ad un certo punto dell'anno si blocca la linea, non è ammissibile
+					flag=true;
+					break;
+				}
+				somma+=du.getUtilizzazione();
+			}
+			
+			if(flag) {
+				return false;
+			}
+			else {
+			uMedia= somma/res.getDiagnosiU().get(ws).size();
+			}
+		}
+		
+		if(uMedia >uOttima) {
+			uOttima=uMedia;
+			
+			if(bothDays>res.getBo().getCountBoth()) {
+				bothDays = res.getBo().getCountBoth();
+				return true;
+			}
+			
+			if(CTDays > res.getBo().getCountCT() && THDays ==  res.getBo().getCountTH()) {
+				CTDays= res.getBo().getCountCT();
+				return true;
+			}
+			
+			if(THDays > res.getBo().getCountTH() && CTDays ==  res.getBo().getCountCT()) {
+				THDays= res.getBo().getCountTH();
+				return true;
+			}
+				
+		}
+		
+		return false;
 	}
 
 }

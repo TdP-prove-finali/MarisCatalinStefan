@@ -4,7 +4,7 @@ public class BenchmarkOutput {
 	
 	private int countBoth;
 	private int countTH;
-	private int  countCT;
+	private int countCT;
 	
 	public BenchmarkOutput(int countBoth, int countTH, int countCT) {
 		
