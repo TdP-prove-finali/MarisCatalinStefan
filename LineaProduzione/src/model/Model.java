@@ -225,20 +225,20 @@ public class Model {
 		 
 	
 		 
-       // ricorsione  
-		 List<Parametro> passati=new ArrayList<>();
+       // ricorsione
+		 
 		 domande=dao.getDomande(prodotto);
 		 
-		 this.recursive(parametri, passati, linea, domande);
+		 this.recursive(parametri, linea, domande, parametri);
 		 
 		 
 		 return soluzioneOttima;
 		 
 	}
 
-	private void recursive(List<Parametro> parametri, List<Parametro> passati, Linea linea, List<Domanda> domande) {
+	private void recursive(List<Parametro> parametri, Linea linea, List<Domanda> domande, List<Parametro> parametriDaSalvare) {
 		
-		Simulazione sim= new Simulazione(domande, linea);
+		/*Simulazione sim= new Simulazione(domande, linea);
 		sim.init();
 		SimResult res=sim.run();
 		BenchmarkOutput countOverPWC=this.benchmark(linea,res.getPrestazioni());
@@ -254,17 +254,47 @@ public class Model {
 		
 		for(Parametro p: parametriNew) {
 			
-			passati.add(p);
+			List<Parametro> passatiNew=new ArrayList<>(passati);
+			passatiNew.add(p);
 			
-			for(double i=0;i+p.getMin() <= p.getMax(); i=i+0.1) {
+			for(double i=0; i+p.getMin() <= p.getMax(); i = i + 0.1 ) {
+				
 				p.setCurrent(p.getMin()+i);
-				recursive(parametri, passati, linea, domande);
-				p.setCurrent(p.getMin());	
+				recursive(parametri, passatiNew, linea, domande);
+				p.setCurrent(p.getMin());
 			}
+			
+		}*/
+		
+		for(Parametro p: parametri) {
+				
+			  List<Parametro> parametriNew=new ArrayList<>(parametri);
+			  parametriNew.remove(p);
+				
+			  for(double i=0; i+p.getMin() <= p.getMax(); i = i + 0.1 ) {
+				
+				 p.setCurrent(p.getMin()+i);
+				 
+				
+				 Simulazione sim= new Simulazione(domande, linea);
+				 sim.init();
+				 SimResult res=sim.run();
+				 BenchmarkOutput countOverPWC=this.benchmark(linea,res.getPrestazioni());
+				 res.setBo(countOverPWC);
+				
+				 if(checkResult(res))
+					soluzioneOttima= new OptimizationResult(res, parametriDaSalvare);
+				 
+				 
+				if(parametriNew.size()>0) {
+				recursive(parametriNew,linea, domande, parametriDaSalvare);
+				}
+				
+				p.setCurrent(p.getMin());
+			}
+				
+			
 		}
-		
-		
-		
 	}
 	
 	

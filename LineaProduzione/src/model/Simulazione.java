@@ -54,7 +54,7 @@ public class Simulazione {
 	while((d = queue.poll()) != null)  {
 		boolean x= processDemand(d);
 		if(!x) {
-			System.out.println("Utilizzazione eccessiva!!!!!!! \n");
+			//System.out.println("Utilizzazione eccessiva!!!!!!! \n");
 			break;
 			
 		}

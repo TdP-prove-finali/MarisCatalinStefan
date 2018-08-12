@@ -12,14 +12,21 @@ public class TestModel {
 		
 		Linea linea= new Linea();
 		
-		WorkStation ws1= new WorkStation("ws1", 24, 1.3, 2);
+		WorkStation ws1= new WorkStation("ws1", 28, 1.3, 2);
 		
-		WorkStation ws2= new WorkStation("ws2", 26, 0.1, 1);
+		WorkStation ws2= new WorkStation("ws2", 24, 0.1, 1);
 		
 		ws1.setSetup(true);
-		ws1.setNs(new Parametro("Ns",30,29, ws1));
-		ws1.setTs(new Parametro("Ts", 10,9, ws1));
-		ws1.setCs(new Parametro("Cs", 0.9, 0.8, ws1));
+		ws1.setNs(new Parametro("Ns",30,29.9, ws1));
+		ws1.setTs(new Parametro("Ts", 20,18, ws1));
+		ws1.setCs(new Parametro("Cs", 1.4, 1.1, ws1));
+		
+		/*ws2.setSetup(true);
+		ws2.setNs(new Parametro("Ns 2",125,124.9, ws2));
+		ws2.setTs(new Parametro("Ts 2", 4,3.9, ws2));
+		ws2.setCs(new Parametro("Cs 2", 1.1, 1, ws2));*/
+		
+		
 		
 		linea.addWS(ws1);
 		linea.addWS(ws2);
@@ -28,7 +35,6 @@ public class TestModel {
 		
 		
 		//per individuare criticità valuto valori medi su tutto l'anno
-	
 		for(WorkStation ws: res.getRisultatiOttimiSimulazione().getDiagnosiU().keySet()) {
 			double somma=0;
 			for(DiagnosiU du:res.getRisultatiOttimiSimulazione().getDiagnosiU().get(ws)) {
