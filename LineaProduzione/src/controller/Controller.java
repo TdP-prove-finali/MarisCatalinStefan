@@ -6,9 +6,6 @@ package controller;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -23,7 +20,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import model.BenchmarkOutput;
 import model.DiagnosiU;
-import model.Domanda;
 import model.Linea;
 import model.Model;
 import model.Parametro;

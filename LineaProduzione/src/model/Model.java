@@ -258,19 +258,8 @@ public class Model {
 				
 			  for(double i=0; i+p.getMin() <= p.getMax()+0.01; i = i + 0.1 ) {//+0.01 for IEEE Arithmetic
 				
-				
 				 p.setCurrent(p.getMin()+i);
-				 
-				
-				/* Simulazione sim= new Simulazione(domande, linea);
-				 sim.init();
-				 SimResult res=sim.run();
-				 BenchmarkOutput countOverPWC=this.benchmark(linea,res.getPrestazioni());
-				 res.setBo(countOverPWC);
-				
-				 
-				 if(checkResult(res, parametriDaSalvare))
-					soluzioneOttima= new OptimizationResult(res, parametriDaSalvare);*/
+				  
 				 
 				recursive(parametriNew,linea, domande, parametriDaSalvare);
 				
@@ -284,9 +273,10 @@ public class Model {
 	}
 	
 	
-// rivedi questa parte ( magari cerca di minimizzare le performance ma allo stesso tempo mantieni un' utilizzazione decente)
+
 	
 	private HashMap<WorkStation, Double> uOttime;
+	private int count=0;
 	
 	private boolean checkResult(SimResult res, List<Parametro> parametriDaSalvare) {
 		
@@ -294,10 +284,9 @@ public class Model {
 		
 			HashMap<WorkStation, Double> uMedie= new HashMap<>();
 			for(Parametro p: parametriDaSalvare) {
-			System.out.println(p.getNome()+" "+(double)Math.round(p.getCurrent()*100)/100+"\n");
 			}
 			for(WorkStation ws: res.getDiagnosiU().keySet()) {
-				//System.out.println(ws+"\n");
+				
 				if(res.getDiagnosiU().get(ws).size() < 365) {
 				
 					return false;
@@ -306,8 +295,7 @@ public class Model {
 				double sum=0;
 				int x=1;
 				for(DiagnosiU du:res.getDiagnosiU().get(ws)) {
-					//System.out.println(x+" "+du.getUtilizzazione()+"\n");
-					//x++;
+					
 					sum+=du.getUtilizzazione();
 				}
 				
@@ -321,7 +309,6 @@ public class Model {
 			boolean flag= true;
 			
 				for(WorkStation ws: res.getDiagnosiU().keySet() ) {
-					System.out.println(uMedie.get(ws) +" e le ottime:"+uOttime.get(ws)+"\n");
 					if(uMedie.get(ws) >=  uOttime.get(ws)) {
 						uOttime.put(ws,uMedie.get(ws));
 						
@@ -330,8 +317,10 @@ public class Model {
 						flag=false;
 				}
 				
-				if(flag)
+				if(flag) {
 					return true;
+					
+				}
 					
 			
 		
