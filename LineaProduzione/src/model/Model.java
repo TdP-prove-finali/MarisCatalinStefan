@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import db.Dao;
@@ -18,11 +19,8 @@ public class Model {
 	{
 		listaWS=new ArrayList<>();
 		dao=new Dao();
+		uOttime=new HashMap<>();
 		
-		uOttima=0;
-		bothDays=Integer.MAX_VALUE;
-		CTDays=Integer.MAX_VALUE;
-		THDays=Integer.MAX_VALUE;
 		
 	}
 	
@@ -220,7 +218,9 @@ public class Model {
 				if(ws.isRilavorazioni()) {
 					parametri.add(ws.getP());
 				}
-					
+				
+				uOttime.put(ws, 0.0);
+				
 			}
 		 
 	
@@ -228,6 +228,7 @@ public class Model {
        // ricorsione
 		 
 		 domande=dao.getDomande(prodotto);
+		 List<List<Parametro>> passati= new ArrayList<>();
 		 
 		 this.recursive(parametri, linea, domande, parametri);
 		 
@@ -238,59 +239,44 @@ public class Model {
 
 	private void recursive(List<Parametro> parametri, Linea linea, List<Domanda> domande, List<Parametro> parametriDaSalvare) {
 		
-		/*Simulazione sim= new Simulazione(domande, linea);
-		sim.init();
-		SimResult res=sim.run();
-		BenchmarkOutput countOverPWC=this.benchmark(linea,res.getPrestazioni());
-		res.setBo(countOverPWC);
+		if(parametri.size() == 0) {
+		Simulazione sim= new Simulazione(domande, linea);
+		 sim.init();
+		 SimResult res=sim.run();
+		 BenchmarkOutput countOverPWC=this.benchmark(linea,res.getPrestazioni());
+		 res.setBo(countOverPWC);
 		
-		if(checkResult(res))
-			soluzioneOttima= new OptimizationResult(res, parametri);
-		
-		
-		List<Parametro> parametriNew=new ArrayList<>(parametri);
-		parametriNew.removeAll(passati);
-		
-		
-		for(Parametro p: parametriNew) {
-			
-			List<Parametro> passatiNew=new ArrayList<>(passati);
-			passatiNew.add(p);
-			
-			for(double i=0; i+p.getMin() <= p.getMax(); i = i + 0.1 ) {
-				
-				p.setCurrent(p.getMin()+i);
-				recursive(parametri, passatiNew, linea, domande);
-				p.setCurrent(p.getMin());
-			}
-			
-		}*/
+		 
+		 if(checkResult(res, parametriDaSalvare))
+			soluzioneOttima= new OptimizationResult(res, parametriDaSalvare);
+		}
 		
 		for(Parametro p: parametri) {
 				
 			  List<Parametro> parametriNew=new ArrayList<>(parametri);
 			  parametriNew.remove(p);
 				
-			  for(double i=0; i+p.getMin() <= p.getMax(); i = i + 0.1 ) {
+			  for(double i=0; i+p.getMin() <= p.getMax()+0.01; i = i + 0.1 ) {//+0.01 for IEEE Arithmetic
+				
 				
 				 p.setCurrent(p.getMin()+i);
 				 
 				
-				 Simulazione sim= new Simulazione(domande, linea);
+				/* Simulazione sim= new Simulazione(domande, linea);
 				 sim.init();
 				 SimResult res=sim.run();
 				 BenchmarkOutput countOverPWC=this.benchmark(linea,res.getPrestazioni());
 				 res.setBo(countOverPWC);
 				
-				 if(checkResult(res))
-					soluzioneOttima= new OptimizationResult(res, parametriDaSalvare);
 				 
+				 if(checkResult(res, parametriDaSalvare))
+					soluzioneOttima= new OptimizationResult(res, parametriDaSalvare);*/
 				 
-				if(parametriNew.size()>0) {
 				recursive(parametriNew,linea, domande, parametriDaSalvare);
-				}
+				
 				
 				p.setCurrent(p.getMin());
+				
 			}
 				
 			
@@ -298,56 +284,58 @@ public class Model {
 	}
 	
 	
-
-	private double uOttima;
-	private int bothDays;
-	private int CTDays;
-	private int THDays;
+// rivedi questa parte ( magari cerca di minimizzare le performance ma allo stesso tempo mantieni un' utilizzazione decente)
 	
-	private boolean checkResult(SimResult res) {
-		double uMedia=0;
+	private HashMap<WorkStation, Double> uOttime;
+	
+	private boolean checkResult(SimResult res, List<Parametro> parametriDaSalvare) {
 		
-		for(WorkStation ws: res.getDiagnosiU().keySet()) {
-			boolean flag=false;
-			double somma=0;
-			for(DiagnosiU du:res.getDiagnosiU().get(ws)) {
+		
+		
+			HashMap<WorkStation, Double> uMedie= new HashMap<>();
+			for(Parametro p: parametriDaSalvare) {
+			System.out.println(p.getNome()+" "+(double)Math.round(p.getCurrent()*100)/100+"\n");
+			}
+			for(WorkStation ws: res.getDiagnosiU().keySet()) {
+				//System.out.println(ws+"\n");
+				if(res.getDiagnosiU().get(ws).size() < 365) {
 				
-				if(du.getUtilizzazione()>1) {
-					//ad un certo punto dell'anno si blocca la linea, non è ammissibile
-					flag=true;
-					break;
+					return false;
 				}
-				somma+=du.getUtilizzazione();
-			}
-			
-			if(flag) {
-				return false;
-			}
-			else {
-			uMedia= somma/res.getDiagnosiU().get(ws).size();
-			}
-		}
-		
-		if(uMedia >uOttima) {
-			uOttima=uMedia;
-			
-			if(bothDays>res.getBo().getCountBoth()) {
-				bothDays = res.getBo().getCountBoth();
-				return true;
-			}
-			
-			if(CTDays > res.getBo().getCountCT() && THDays ==  res.getBo().getCountTH()) {
-				CTDays= res.getBo().getCountCT();
-				return true;
-			}
-			
-			if(THDays > res.getBo().getCountTH() && CTDays ==  res.getBo().getCountCT()) {
-				THDays= res.getBo().getCountTH();
-				return true;
-			}
 				
-		}
+				double sum=0;
+				int x=1;
+				for(DiagnosiU du:res.getDiagnosiU().get(ws)) {
+					//System.out.println(x+" "+du.getUtilizzazione()+"\n");
+					//x++;
+					sum+=du.getUtilizzazione();
+				}
+				
+				double media = sum/res.getDiagnosiU().get(ws).size();
+				
+				uMedie.put(ws,media);
+				
+			}
+			
+			
+			boolean flag= true;
+			
+				for(WorkStation ws: res.getDiagnosiU().keySet() ) {
+					System.out.println(uMedie.get(ws) +" e le ottime:"+uOttime.get(ws)+"\n");
+					if(uMedie.get(ws) >=  uOttime.get(ws)) {
+						uOttime.put(ws,uMedie.get(ws));
+						
+					}
+					else
+						flag=false;
+				}
+				
+				if(flag)
+					return true;
+					
+			
 		
+			
 		return false;
 	}
 

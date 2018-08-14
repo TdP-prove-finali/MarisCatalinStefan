@@ -49,10 +49,19 @@ public class Parametro implements Comparable<Parametro> {
 		return nome;
 	}
 
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(current);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(max);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(min);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + ((ws == null) ? 0 : ws.hashCode());
 		return result;
@@ -67,6 +76,12 @@ public class Parametro implements Comparable<Parametro> {
 		if (getClass() != obj.getClass())
 			return false;
 		Parametro other = (Parametro) obj;
+		if (Double.doubleToLongBits(current) != Double.doubleToLongBits(other.current))
+			return false;
+		if (Double.doubleToLongBits(max) != Double.doubleToLongBits(other.max))
+			return false;
+		if (Double.doubleToLongBits(min) != Double.doubleToLongBits(other.min))
+			return false;
 		if (nome == null) {
 			if (other.nome != null)
 				return false;

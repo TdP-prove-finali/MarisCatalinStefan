@@ -1,6 +1,5 @@
 package model;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,19 +11,25 @@ public class TestModel {
 		
 		Linea linea= new Linea();
 		
-		WorkStation ws1= new WorkStation("ws1", 28, 1.3, 2);
+		WorkStation ws1= new WorkStation("ws1", 55.911543, 0.3, 2);
 		
-		WorkStation ws2= new WorkStation("ws2", 24, 0.1, 1);
+		WorkStation ws2= new WorkStation("ws2", 4, 0.1, 1);
 		
-		ws1.setSetup(true);
-		ws1.setNs(new Parametro("Ns",30,29.9, ws1));
-		ws1.setTs(new Parametro("Ts", 20,18, ws1));
-		ws1.setCs(new Parametro("Cs", 1.4, 1.1, ws1));
+		/*ws1.setSetup(true);
+		ws1.setNs(new Parametro("Ns",10,9.5, ws1));
+		ws1.setTs(new Parametro("Ts", 17,16.5, ws1));
+		ws1.setCs(new Parametro("Cs", 0.1,0.1 , ws1));*/
 		
-		/*ws2.setSetup(true);
-		ws2.setNs(new Parametro("Ns 2",125,124.9, ws2));
-		ws2.setTs(new Parametro("Ts 2", 4,3.9, ws2));
-		ws2.setCs(new Parametro("Cs 2", 1.1, 1, ws2));*/
+		/*ws2.setGuasti(true);
+		ws2.setMf(new Parametro("Mf",130,130, ws2));
+		ws2.setMr(new Parametro("Mr", 4,4, ws2));
+		ws2.setCf(new Parametro("Cf", 1.1, 1.1, ws2));
+		ws2.setCr(new Parametro("Cr", 1.1, 1.1, ws2));*/
+		
+		ws2.setRilavorazioni(true);
+		ws2.setP(new Parametro("P", 0.6, 0.4, ws2));
+	
+		
 		
 		
 		
