@@ -276,24 +276,18 @@ public class Model {
 
 	
 	private HashMap<WorkStation, Double> uOttime;
-	private int count=0;
-	
 	private boolean checkResult(SimResult res, List<Parametro> parametriDaSalvare) {
 		
 		
 		
 			HashMap<WorkStation, Double> uMedie= new HashMap<>();
-			for(Parametro p: parametriDaSalvare) {
-			}
 			for(WorkStation ws: res.getDiagnosiU().keySet()) {
-				
-				if(res.getDiagnosiU().get(ws).size() < 365) {
-				
+				if(res.getDiagnosiU().get(ws).size() < 365) { // vuol dire che c'è stato un blocco
+				    
 					return false;
 				}
 				
 				double sum=0;
-				int x=1;
 				for(DiagnosiU du:res.getDiagnosiU().get(ws)) {
 					
 					sum+=du.getUtilizzazione();

@@ -11,14 +11,14 @@ public class TestModel {
 		
 		Linea linea= new Linea();
 		
-		WorkStation ws1= new WorkStation("ws1", 1.5, 0.3, 2);
+		WorkStation ws1= new WorkStation("ws1", 13.779, 0.3, 2);
 		
-		WorkStation ws2= new WorkStation("ws2", 1, 0.1, 1);
+		WorkStation ws2= new WorkStation("ws2", 8, 0.1, 1);
 		
-		/*ws1.setSetup(true);
-		ws1.setNs(new Parametro("Ns",10,9, ws1));
+		ws1.setSetup(true);
+		ws1.setNs(new Parametro("Ns",10,7, ws1));
 		ws1.setTs(new Parametro("Ts", 2,1, ws1));
-		ws1.setCs(new Parametro("Cs", 0.9,0.8 , ws1));*/
+		ws1.setCs(new Parametro("Cs", 0.9,0.8 , ws1));
 		
 		/*ws2.setGuasti(true);
 		ws2.setMf(new Parametro("Mf",130,130, ws2));
@@ -26,8 +26,8 @@ public class TestModel {
 		ws2.setCf(new Parametro("Cf", 1.1, 1.1, ws2));
 		ws2.setCr(new Parametro("Cr", 1.1, 1.1, ws2));*/
 		
-		ws2.setRilavorazioni(true);
-		ws2.setP(new Parametro("P", 0.4, 0.2, ws2));
+		ws1.setRilavorazioni(true);
+		ws1.setP(new Parametro("P", 0.4, 0.2, ws1));
 	
 		
 		
@@ -37,7 +37,10 @@ public class TestModel {
 		linea.addWS(ws2);
 		OptimizationResult res = model.ottimizza("P_B", linea);
 		 
-		
+		if(res == null) {
+			System.out.println("Utilizzazione eccessiva!!!");
+		}
+		else {
 		
 		//per individuare criticità valuto valori medi su tutto l'anno
 		for(WorkStation ws: res.getRisultatiOttimiSimulazione().getDiagnosiU().keySet()) {
@@ -68,6 +71,7 @@ public class TestModel {
          for(Parametro p:parametri) {
         	 System.out.println(p.getWs()+" "+p.getNome()+" "+p.getCurrent()+"\n"); 
          }
+	}
 	}
 	
 

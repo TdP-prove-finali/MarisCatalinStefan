@@ -6,6 +6,8 @@ package controller;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -22,6 +24,7 @@ import model.BenchmarkOutput;
 import model.DiagnosiU;
 import model.Linea;
 import model.Model;
+import model.OptimizationResult;
 import model.Parametro;
 import model.SimResult;
 import model.WorkStation;
@@ -249,6 +252,51 @@ public class Controller {
 
     @FXML
     void ottimizza(ActionEvent event) {
+    	txtResult.clear();
+    	String prodoto = comboProdotto.getValue();
+    	OptimizationResult res= model.ottimizza(prodoto, linea);
+    	
+    	if(res == null) {
+			txtResult.appendText("Utilizzazione eccessiva su una o più ws della linea!!!");
+		}
+    	else {
+    		
+    		//per individuare criticità valuto valori medi su tutto l'anno
+    		for(WorkStation ws: res.getRisultatiOttimiSimulazione().getDiagnosiU().keySet()) {
+    			double somma=0;
+    			for(DiagnosiU du:res.getRisultatiOttimiSimulazione().getDiagnosiU().get(ws)) {
+    				
+    				somma+=du.getUtilizzazione();
+    			}
+    			
+    			
+    			
+    			double media= somma/res.getRisultatiOttimiSimulazione().getDiagnosiU().get(ws).size();
+    				txtResult.appendText("La workstation "+ws+" ha un' utilizzazione media di "+media+"\n");
+    			
+    		}
+    		
+    		BenchmarkOutput benchMark=res.getRisultatiOttimiSimulazione().getBo();
+    		double count2= benchMark.getCountBoth();
+    		double countTH= benchMark.getCountTH();
+    		double countCT= benchMark.getCountCT();
+    		txtResult.appendText("Benchmarking interno: \n la linea è stata al di sotto di THpwc e CTpwc "+count2+" giorni, "
+    				+ "solo al di sotto di THpwc "+countTH+" giorni, e solo al di sotto di CTpwc "+countCT+" giorni \n");
+    		
+    		
+    		 System.out.println("Parametri ottimi: \n");
+    		 List<Parametro> parametri=res.getParametriOttimi();
+             Collections.sort(parametri);
+             for(Parametro p:parametri) {
+            	 txtResult.appendText(p.getWs()+" "+p.getNome()+" "+p.getCurrent()+"\n"); 
+             }
+
+    		
+    		
+    	}
+    	
+    	
+    	
 
     }
 

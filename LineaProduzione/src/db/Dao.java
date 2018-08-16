@@ -15,7 +15,7 @@ public class Dao {
 	
 	public List<String> getProdotti() {
 		
-		final String sql = "SELECT DISTINCT Prodotto FROM vendite";
+		final String sql = "SELECT DISTINCT Prodotto FROM venditeprodotti";
 
 		List<String> result = new LinkedList<>();
 
@@ -41,7 +41,7 @@ public class Dao {
 	public List<Domanda> getDomande(String prodotto){
 		
 		final String sql = "select Data, Quantita\r\n" + 
-				"from vendite\r\n" + 
+				"from venditeprodotti\r\n" + 
 				"where Prodotto = ? \r\n" + 
 				"order by Data";
 
