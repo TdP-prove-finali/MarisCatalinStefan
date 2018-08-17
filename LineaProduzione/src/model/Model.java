@@ -66,14 +66,14 @@ public class Model {
 		int countCT=0;
 		
 		for(Prestazioni p: prestazioni) {
-			//System.out.println("Giorno "+p.getData()+"\n");
+			
 			double THpwc= this.THpwc(p.getWorkInProcess(), linea);
 			double CTpwc= this.CTpwc(p.getWorkInProcess(), linea);
 			
 			double TH= p.getThroughput();
 			double CT= p.getCycleTime();
 			
-			//System.out.println(TH+"-"+THpwc+"   "+CT+"-"+CTpwc+"\n");
+			
 			
 			if(TH<THpwc && CT>CTpwc)
 				countBOTH++;
@@ -140,7 +140,6 @@ public class Model {
 		
 		
 		for(WorkStation ws: linea.getListaWS()) {
-			//per semplicità considero collo di bottiglia la ws con tempo di processo maggiore
 			double tp= ws.getTe()/ws.getM();
 			
 			if(tp> max)
@@ -225,7 +224,7 @@ public class Model {
 		 
 	
 		 
-       // ricorsione
+    
 		 
 		 domande=dao.getDomande(prodotto);
 		 List<List<Parametro>> passati= new ArrayList<>();
@@ -282,7 +281,7 @@ public class Model {
 		
 			HashMap<WorkStation, Double> uMedie= new HashMap<>();
 			for(WorkStation ws: res.getDiagnosiU().keySet()) {
-				if(res.getDiagnosiU().get(ws).size() < 365) { // vuol dire che c'è stato un blocco
+				if(res.getDiagnosiU().get(ws).size() < 365) { // c'è stato un blocco
 				    
 					return false;
 				}

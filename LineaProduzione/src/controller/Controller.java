@@ -9,13 +9,10 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -32,7 +29,7 @@ import model.WorkStation;
 public class Controller {
 	
 	 private Model model;
-	 private Linea linea;
+	 private Linea linea = new Linea();
 	
 
     @FXML // fx:id="hA"
@@ -93,7 +90,7 @@ public class Controller {
     private HBox h3; // Value injected by FXMLLoader
 
     @FXML // fx:id="minCf"
-    private TextArea minCf; // Value injected by FXMLLoader
+    private TextField minCf; // Value injected by FXMLLoader
 
     @FXML // fx:id="MaxCf"
     private TextField MaxCf; // Value injected by FXMLLoader
@@ -102,7 +99,7 @@ public class Controller {
     private HBox h4; // Value injected by FXMLLoader
 
     @FXML // fx:id="minCr"
-    private TextArea minCr; // Value injected by FXMLLoader
+    private TextField minCr; // Value injected by FXMLLoader
 
     @FXML // fx:id="maxCr"
     private TextField maxCr; // Value injected by FXMLLoader
@@ -153,7 +150,7 @@ public class Controller {
     private Button setLinea; // Value injected by FXMLLoader
 
     @FXML // fx:id="wss"
-    private ChoiceBox<WorkStation> wss; // Value injected by FXMLLoader
+    private ComboBox<WorkStation> wss; // Value injected by FXMLLoader
 
     @FXML // fx:id="aggiungiWS"
     private Button aggiungiWS; // Value injected by FXMLLoader
@@ -177,75 +174,136 @@ public class Controller {
 
     @FXML
     void aggiungiWs(ActionEvent event) {
-    	WorkStation ws= wss.getSelectionModel().getSelectedItem();
+    	WorkStation ws= wss.getValue();
+    	if(ws != null) {
     	linea.addWS(ws);
     	txtResult.setText("Aggiunta workstation "+ws+" alla linea");
+    	}
+    	else
+    		txtResult.setText("SELEZIONARE UNA WORKSTATION");
     }
     
 
     @FXML
     void creaLinea(ActionEvent event) {
+    	if(linea.getListaWS().size()>0) {
     	txtResult.setText("Linea creata");
-    	
     	model.addLinea(linea);
     	hA.setDisable(false);
     	hB.setDisable(false);
     	hC.setDisable(false);
     	txtResult.setDisable(false);
+    	}
+    	else
+    		txtResult.setText("INSERIRE ALMENO UNA WORKSTATION ");
     	
 
     }
 
     @FXML
     void creaWS(ActionEvent event) {
-    	String nome=nameWS.getText();
-    	double t=Double.parseDouble(t0.getText());//ipotizzo valori in secondi
-    	double c=Double.parseDouble(c0.getText());
-    	int macchine=Integer.parseInt(m.getText());
+    	
+    	if(nameWS.getText().equals("") || t0.getText().equals("") || c0.getText().equals("") || m.getText().equals(""))
+    		txtResult.setText("INSERIRE TUTTI I PARAMETRI DI PROGETTAZIONE");
+    	else {
+    		try {
+    		String nome=nameWS.getText();
+        	double t=Double.parseDouble(t0.getText());//ipotizzo valori in secondi
+        	double c=Double.parseDouble(c0.getText());
+        	int macchine=Integer.parseInt(m.getText());
     	
     	WorkStation ws=new WorkStation(nome,t,c, macchine);
     	
     	if(check1.isSelected())
     	{
+    		
+    		if(!maxMf.getText().equals("") && !minMf.getText().equals("") && !maxMr.getText().equals("") && !minMr.getText().equals("") && !MaxCf.getText().equals("") && !minCf.getText().equals("") && !maxCr.getText().equals("") && !minCr.getText().equals("") )
+    		{
+    		try {	
     		ws.setGuasti(true);
-    	
     		ws.setMf(new Parametro("Mf",Double.parseDouble(maxMf.getText()),Double.parseDouble(minMf.getText()), ws ));
     		ws.setMr(new Parametro("Mr",Double.parseDouble(maxMr.getText()),Double.parseDouble(minMr.getText()), ws ));
     		ws.setCf(new Parametro("Cf",Double.parseDouble(MaxCf.getText()),Double.parseDouble(minCf.getText()), ws ));
     		ws.setCr(new Parametro("Cr",Double.parseDouble(maxCr.getText()),Double.parseDouble(minCr.getText()), ws ));
-    		
+    		}
+    		catch(NumberFormatException e) {
+    			txtResult.setText("FORMATO PARAMETRI SUPPLEMENTARI ERRATO, i parametri in questione saranno ignorati");
+    		}
+    		}
     		
     	}
     	
     	if(check2.isSelected())
     	{
+    		if(!maxNs.getText().equals("") && !minNs.getText().equals("") && !maxTs.getText().equals("") && !minTs.getText().equals("") && !maxCs.getText().equals("") && !minCs.getText().equals("") )
+    		{
+    			try {
     		ws.setSetup(true);
     		ws.setNs(new Parametro("Ns",Double.parseDouble(maxNs.getText()),Double.parseDouble(minNs.getText()), ws ));
     		ws.setTs(new Parametro("Ts",Double.parseDouble(maxTs.getText()),Double.parseDouble(minTs.getText()), ws ));
     		ws.setCs(new Parametro("Cs",Double.parseDouble(maxCs.getText()),Double.parseDouble(minCs.getText()), ws ));
-    		
+    			}
+    			catch(NumberFormatException e) {
+        			txtResult.setText("FORMATO PARAMETRI SUPPLEMENTARI ERRATO, i parametri in questione saranno ignorati");
+    			}
+    		}
     	}
     	
     	if(check3.isSelected())
     	{
+    		if(!maxP.getText().equals("") && !minP.getText().equals("")) {
+    			try {
     		ws.setRilavorazioni(true);
-    		
     		ws.setP(new Parametro("P",Double.parseDouble(maxP.getText()),Double.parseDouble(minP.getText()), ws ));
-    		
+    			}
+    			catch(NumberFormatException e) {
+        			txtResult.setText("FORMATO PARAMETRI SUPPLEMENTARI ERRATO, i parametri in questione saranno ignorati");
+
+    			}
+    		}
     	
     	}
     	
-    	wss.setItems(FXCollections.observableArrayList(model.addWS(ws)));
+    	wss.getItems().add(ws);
     	
     	nameWS.clear();
     	t0.clear();
     	c0.clear();
     	m.clear();
     	check1.setSelected(false);
+    	maxMf.clear();
+    	minMf.clear();
+    	maxMr.clear();
+    	minMr.clear();
+    	MaxCf.clear();
+    	minCf.clear();
+    	maxCr.clear();
+    	minCr.clear();
     	check2.setSelected(false);
+    	maxNs.clear();
+    	minNs.clear();
+    	maxTs.clear();
+    	minTs.clear();
+    	maxCs.clear();
+    	minCs.clear();
     	check3.setSelected(false);
+    	maxP.clear();
+    	minP.clear();
     	
-
+    	h1.setDisable(true);
+    	h2.setDisable(true);
+    	h3.setDisable(true);
+    	h4.setDisable(true);
+    	h5.setDisable(true);
+    	h6.setDisable(true);
+    	h7.setDisable(true);
+    	h8.setDisable(true);
+    	
+    		}
+    		catch(NumberFormatException e) {
+    			txtResult.setText("FORMATO DEI PARAMETRI DI PROGETTAZIONE ERRATO");
+    		}
+    	}
     }
 
    
@@ -253,8 +311,10 @@ public class Controller {
     @FXML
     void ottimizza(ActionEvent event) {
     	txtResult.clear();
-    	String prodoto = comboProdotto.getValue();
-    	OptimizationResult res= model.ottimizza(prodoto, linea);
+    	if(linea.getListaWS().size() > 0) {
+    	String prodotto = comboProdotto.getValue();
+    	if(prodotto != null) {
+    	OptimizationResult res= model.ottimizza(prodotto, linea);
     	
     	if(res == null) {
 			txtResult.appendText("Utilizzazione eccessiva su una o più ws della linea!!!");
@@ -291,21 +351,22 @@ public class Controller {
             	 txtResult.appendText(p.getWs()+" "+p.getNome()+" "+p.getCurrent()+"\n"); 
              }
 
-    		
-    		
     	}
-    	
-    	
-    	
-
+    	}
+    	else
+    		txtResult.setText("SELEZIONARE UN PRODOTTO");
+    	}
+    	else
+    		txtResult.setText("PER EFFETTUARE LA SIMULAZIONE BISOGNA PRIMA CREARE UNA LINEA");
     }
 
     
     @FXML
     void simulazione(ActionEvent event) {
     	txtResult.clear();
+    	if(linea.getListaWS().size() > 0) {
     	String prodotto= comboProdotto.getValue();
-    	
+    	if(prodotto != null) {
     	SimResult res= model.simula(prodotto, linea);
     	
     	for(WorkStation ws: res.getDiagnosiU().keySet()) {
@@ -330,7 +391,6 @@ public class Controller {
 			}
 			
 			if(flag) {
-				//System.out.println("Si verifica un blocco il giorno "+lockDay+" alla workstation "+lockWS +" per via di una u di "+lockU+"\n");
 				txtResult.setText("Si verifica un blocco il giorno "+lockDay+" alla workstation "+lockWS +" per via di una u di "+lockU+"\n");
 				break;
 			}
@@ -338,7 +398,7 @@ public class Controller {
 			double media= somma/res.getDiagnosiU().get(ws).size();
 			if(media <0.4) {
 				txtResult.setText("La workstation "+ws+" ha un' utilizzazione media troppo bassa ("+media+") \n");
-				//System.out.println("La workstation "+ws+" ha un' utilizzazione media troppo bassa ("+media+") \n");
+				
 			}
 			}
 		}
@@ -350,10 +410,13 @@ public class Controller {
 		txtResult.appendText("Benchmarking interno: \n la linea è stata al di sotto di THpwc e CTpwc "+count2+" giorni, "
 				+ "solo al di sotto di THpwc "+countTH+" giorni, e solo al di sotto di CTpwc "+countCT+" giorni");
 		
-		/*System.out.println("Benchmarking interno: \n la linea è stata al di sotto di THpwc e CTpwc "+count2+" giorni, "
-				+ "solo al di sotto di THpwc "+countTH+" giorni, e solo al di sotto di CTpwc "+countCT+" giorni");*/
-    	
-
+    	}
+    	else {
+    		txtResult.setText("SELEZIONARE UN PRODOTTO");
+    	}
+    	}
+    	else
+    		txtResult.setText("PER EFFETTUARE LA SIMULAZIONE BISOGNA PRIMA CREARE UNA LINEA");
     }
     
     

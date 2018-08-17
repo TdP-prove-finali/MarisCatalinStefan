@@ -54,7 +54,6 @@ public class Simulazione {
 	while((d = queue.poll()) != null)  {
 		boolean x= processDemand(d);
 		if(!x) {
-			//System.out.println("Utilizzazione eccessiva!!!!!!! \n");
 			break;
 			
 		}
@@ -69,19 +68,18 @@ public class Simulazione {
 	private boolean processDemand(Domanda d) {
 		Prestazioni prestazioni=new Prestazioni(d.getData());
 		
-		//System.out.println("Giorno "+d.getData()+"\n");
 		
 		double ra=((double)d.getQuantita())/(24*60*60); //tasso di arrivo al secondo
 		double ca=1; //suppongo tasso arrivo mediamente variabile
 		
 		for(WorkStation ws:linea.getListaWS()) {
-			//System.out.println("Worksation: "+ws.toString()+" ");
+	
 			
 			double te=ws.getTe();
 			double ce=ws.getCe();
 			int m=ws.getM();
 			
-			//System.out.println("Parametri: te= "+te+" ce= "+ce+" m= "+m+"\n");
+			
 			
 			//scelgo parametri peggiori per simulazione semplice
 			//l'ordine di applicazioni delle variazioni è questo (supposizione)
@@ -136,7 +134,6 @@ public class Simulazione {
 				
 			}
 			
-			//System.out.println("Variabilità di processo: "+ce+"\n");
 			
 			// suppongo di inserire parametri in secondi
 			
@@ -153,9 +150,6 @@ public class Simulazione {
 			if(u>1)
 				return false; // perchè si blocca la linea
 			
-			//System.out.println("Tasso di arrivo: "+ra+"\n");
-			//System.out.println("Tempo di processo: "+te+"\n");
-			//System.out.println("Utilizzazione: "+u+"\n");
 			
 			//calcolo le prestazioni parziali della singola workstation con la formula più generale possibile
 			
@@ -167,15 +161,14 @@ public class Simulazione {
 			
 			double CTq=x*(y2/z)*te;
 			double CT= CTq+te;
-			//System.out.println("CT: "+CT+"\n");
+			
 			
 			//TH
 			double TH= ra;
-			//System.out.println("TH: "+TH+"\n");
+			
 			
 			//WIP
 			double WIP= CT*TH;
-			//System.out.println("WIP: "+WIP+"\n");
 			
 			prestazioni.setCycleTime(CT);
 			prestazioni.setWorkInProcess(WIP);
@@ -194,10 +187,6 @@ public class Simulazione {
 					ca= 1 + a + b*c;
 				}
 				
-				//System.out.println("Variabilità in uscita: "+ ca +"\n");
-				
-				
-			
 		}
 		
 		 

@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
@@ -152,12 +151,12 @@
                                     <Insets right="10.0" top="10.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextArea fx:id="minCf" maxHeight="5.0" maxWidth="20.0" minHeight="25.0" minWidth="30.0" prefHeight="5.0" prefWidth="20.0">
+                              <TextField fx:id="minCf" maxHeight="5.0" maxWidth="20.0" minHeight="25.0" minWidth="30.0" prefHeight="5.0" prefWidth="20.0">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="8.0" top="5.0" />
                                  </HBox.margin>
-                              </TextArea>
-                              <TextField fx:id="MaxCf" maxHeight="20.0" maxWidth="5.0" minHeight="25.0" minWidth="30.0" prefHeight="5.0" prefWidth="20.0">
+                              </TextField>
+                              <TextField fx:id="MaxCf" maxHeight="20.0" maxWidth="20.0" minHeight="25.0" minWidth="30.0" prefHeight="5.0" prefWidth="20.0">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </HBox.margin>
@@ -171,11 +170,11 @@
                                     <Insets right="10.0" top="10.0" />
                                  </HBox.margin>
                               </Label>
-                              <TextArea fx:id="minCr" maxHeight="5.0" maxWidth="20.0" minHeight="25.0" minWidth="30.0" prefHeight="5.0" prefWidth="20.0">
+                              <TextField fx:id="minCr" maxHeight="5.0" maxWidth="20.0" minHeight="25.0" minWidth="30.0" prefHeight="5.0" prefWidth="20.0">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="8.0" top="5.0" />
                                  </HBox.margin>
-                              </TextArea>
+                              </TextField>
                               <TextField fx:id="maxCr" maxHeight="20.0" maxWidth="5.0" minHeight="25.0" minWidth="30.0" prefHeight="5.0" prefWidth="20.0">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -322,11 +321,11 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <ChoiceBox fx:id="wss" prefWidth="150.0">
+                  <ComboBox fx:id="wss" prefWidth="150.0" promptText="Workstations">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
-                  </ChoiceBox>
+                  </ComboBox>
                   <Button fx:id="aggiungiWS" mnemonicParsing="false" onAction="#aggiungiWs" text="Aggiungi WS">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
