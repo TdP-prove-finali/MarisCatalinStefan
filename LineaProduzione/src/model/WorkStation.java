@@ -38,7 +38,9 @@ public class WorkStation {
 		guasti=false;
 		setup=false;
 		rilavorazioni=false;
-		
+	}
+	
+	public WorkStation() {
 		
 	}
 	

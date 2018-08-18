@@ -171,13 +171,55 @@ public class Controller {
     private ComboBox<String> comboProdotto; // Value injected by FXMLLoader
 
  
+    
+    
+    
+    @FXML
+    void doEditWS(ActionEvent event) {
+    WorkStation ws = wss.getValue();
+    
+    if(ws != null) {
+    	linea.getListaWS().remove(ws);
+    	this.creaWS(event);
+    	wss.getItems().remove(ws);
+    	
+    	
+    	/*String nome= ws.getNome();
+    	double t0=ws.getTe();
+    	double c0= ws.getCe();
+    	int m= ws.getM();
+    	WorkStation newWS=new WorkStation()
+    	if(ws.isGuasti()) {
+    		
+    	}
+    	
+    	if(ws.isSetup()) {
+    		
+    	}
+    	
+    	if(ws.isRilavorazioni()) {
+    		
+    	}*/
+    	
+    	
+    }
+    else
+    	txtResult.setText("Selezionare una workstation");
+    	
+    }
+    
+    
 
     @FXML
     void aggiungiWs(ActionEvent event) {
     	WorkStation ws= wss.getValue();
     	if(ws != null) {
+    		if(ws.getNome() != null) {
     	linea.addWS(ws);
     	txtResult.setText("Aggiunta workstation "+ws+" alla linea");
+    	}
+    		else
+    			txtResult.setText("SELEZIONARE UNA WORKSTATION");		
     	}
     	else
     		txtResult.setText("SELEZIONARE UNA WORKSTATION");
@@ -186,6 +228,39 @@ public class Controller {
 
     @FXML
     void creaLinea(ActionEvent event) {
+    	nameWS.clear();
+    	t0.clear();
+    	c0.clear();
+    	m.clear();
+    	check1.setSelected(false);
+    	maxMf.clear();
+    	minMf.clear();
+    	maxMr.clear();
+    	minMr.clear();
+    	MaxCf.clear();
+    	minCf.clear();
+    	maxCr.clear();
+    	minCr.clear();
+    	check2.setSelected(false);
+    	maxNs.clear();
+    	minNs.clear();
+    	maxTs.clear();
+    	minTs.clear();
+    	maxCs.clear();
+    	minCs.clear();
+    	check3.setSelected(false);
+    	maxP.clear();
+    	minP.clear();
+    	
+    	h1.setDisable(true);
+    	h2.setDisable(true);
+    	h3.setDisable(true);
+    	h4.setDisable(true);
+    	h5.setDisable(true);
+    	h6.setDisable(true);
+    	h7.setDisable(true);
+    	h8.setDisable(true);
+    	
     	if(linea.getListaWS().size()>0) {
     	txtResult.setText("Linea creata");
     	model.addLinea(linea);
@@ -208,7 +283,7 @@ public class Controller {
     	else {
     		try {
     		String nome=nameWS.getText();
-        	double t=Double.parseDouble(t0.getText());//ipotizzo valori in secondi
+        	double t=Double.parseDouble(t0.getText()); //ipotizzo valori in secondi
         	double c=Double.parseDouble(c0.getText());
         	int macchine=Integer.parseInt(m.getText());
     	
@@ -316,8 +391,16 @@ public class Controller {
     	if(prodotto != null) {
     	OptimizationResult res= model.ottimizza(prodotto, linea);
     	
-    	if(res == null) {
-			txtResult.appendText("Utilizzazione eccessiva su una o più ws della linea!!!");
+    	if(res.getLock() != null) {
+			txtResult.appendText("Utilizzazione eccessiva su una o più ws della linea!!! Valori medi di utilizzazione per ws: \n");
+			for(WorkStation ws: res.getLock().keySet()) {
+				if(res.getLock().get(ws) > 0)
+					txtResult.appendText(ws+": "+ res.getLock().get(ws)+"\n");
+					else
+						txtResult.appendText(ws+" utilizzazione troppo elevata fin dal primo giorno di simulazione");
+			}
+			txtResult.appendText("Si consiglia di abbassare i valori dei parametri con le utilizzazioni medie maggiori");
+			
 		}
     	else {
     		
@@ -340,8 +423,8 @@ public class Controller {
     		double count2= benchMark.getCountBoth();
     		double countTH= benchMark.getCountTH();
     		double countCT= benchMark.getCountCT();
-    		txtResult.appendText("Benchmarking interno: \n la linea è stata al di sotto di THpwc e CTpwc "+count2+" giorni, "
-    				+ "solo al di sotto di THpwc "+countTH+" giorni, e solo al di sotto di CTpwc "+countCT+" giorni \n");
+    		txtResult.appendText("Benchmarking interno: \nla linea ha avuto performances peggiori di THpwc e CTpwc "+count2+" giorni, \n"
+    				+ "solo di THpwc "+countTH+" giorni,\ne solo di CTpwc "+countCT+" giorni \n");
     		
     		
     		 System.out.println("Parametri ottimi: \n");
@@ -407,8 +490,8 @@ public class Controller {
 		double count2= benchMark.getCountBoth();
 		double countTH= benchMark.getCountTH();
 		double countCT= benchMark.getCountCT();
-		txtResult.appendText("Benchmarking interno: \n la linea è stata al di sotto di THpwc e CTpwc "+count2+" giorni, "
-				+ "solo al di sotto di THpwc "+countTH+" giorni, e solo al di sotto di CTpwc "+countCT+" giorni");
+		txtResult.appendText("Benchmarking interno: \nla linea ha avuto performances peggiori di THpwc e CTpwc "+count2+" giorni,\n "
+				+ "solo di THpwc "+countTH+" giorni,\n e solo di CTpwc "+countCT+" giorni \n");
 		
     	}
     	else {
@@ -481,7 +564,80 @@ public class Controller {
     		h8.setDisable(false);
     	else
     		h8.setDisable(true);
+    }
+    
+    
+    @FXML
+    void showWs(ActionEvent event) {
 
+    	nameWS.clear();
+    	t0.clear();
+    	c0.clear();
+    	m.clear();
+    	check1.setSelected(false);
+    	maxMf.clear();
+    	minMf.clear();
+    	maxMr.clear();
+    	minMr.clear();
+    	MaxCf.clear();
+    	minCf.clear();
+    	maxCr.clear();
+    	minCr.clear();
+    	check2.setSelected(false);
+    	maxNs.clear();
+    	minNs.clear();
+    	maxTs.clear();
+    	minTs.clear();
+    	maxCs.clear();
+    	minCs.clear();
+    	check3.setSelected(false);
+    	maxP.clear();
+    	minP.clear();
+    	
+    WorkStation ws= wss.getValue();
+    if(ws != null) {
+    nameWS.setText(ws.getNome());
+    t0.setText(ws.getTe()+"");
+    c0.setText(ws.getCe()+"");
+    m.setText(ws.getM()+"");
+    
+    if(ws.isGuasti())
+    {
+    	check1.setSelected(true);
+    	h1.setDisable(false);
+    	h2.setDisable(false);
+    	h3.setDisable(false);
+    	h4.setDisable(false);
+    	minMf.setText(ws.getMf().getMin()+"");
+    	maxMf.setText(ws.getMf().getMax()+"");
+    	minMr.setText(ws.getMr().getMin()+"");
+    	maxMr.setText(ws.getMr().getMax()+"");
+    	minCf.setText(ws.getCf().getMin()+"");
+    	MaxCf.setText(ws.getCf().getMax()+"");
+    	minCr.setText(ws.getCr().getMin()+"");
+    	maxCr.setText(ws.getCr().getMax()+"");
+    }
+    
+    if(ws.isSetup()) {
+    	check2.setSelected(true);
+    	h5.setDisable(false);
+    	h6.setDisable(false);
+    	h7.setDisable(false);
+    	minNs.setText(ws.getNs().getMin()+"");
+    	maxNs.setText(ws.getNs().getMax()+"");
+    	minTs.setText(ws.getTs().getMin()+"");
+    	maxTs.setText(ws.getTs().getMax()+"");
+    	minCs.setText(ws.getCs().getMin()+"");
+    	maxCs.setText(ws.getCs().getMax()+"");
+    }
+    
+    if(ws.isRilavorazioni()) {
+    	check3.setSelected(true);
+    	h8.setDisable(false);
+    	minP.setText(ws.getP().getMin()+"");
+    	maxP.setText(ws.getP().getMax()+"");
+    }
+    }
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -534,6 +690,7 @@ public class Controller {
 	public void setModel(Model model) {
 		this.model=model;
 		comboProdotto.getItems().addAll(model.getProdotti());
+		wss.getItems().add(new WorkStation());
 		
 		
 	}

@@ -55,7 +55,6 @@ public class Simulazione {
 		boolean x= processDemand(d);
 		if(!x) {
 			break;
-			
 		}
 	} 
 	

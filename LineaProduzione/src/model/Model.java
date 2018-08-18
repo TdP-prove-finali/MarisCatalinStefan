@@ -10,16 +10,21 @@ public class Model {
 	
 	private Dao dao;
 	
-	
 	private List<WorkStation> listaWS;
 	private List<Domanda> domande;
 	private Linea linea;
+	
+	private HashMap<WorkStation, Double> uOttime;
+	private HashMap<WorkStation, Double> uMedieLock;
+	private HashMap<WorkStation, Integer> countLock;
 
 	public Model()
 	{
 		listaWS=new ArrayList<>();
 		dao=new Dao();
 		uOttime=new HashMap<>();
+		countLock = new HashMap<>();
+		uMedieLock= new HashMap<>();
 		
 		
 	}
@@ -219,17 +224,23 @@ public class Model {
 				}
 				
 				uOttime.put(ws, 0.0);
+				countLock.put(ws, 0);
+				uMedieLock.put(ws, 0.0);
 				
 			}
 		 
-	
-		 
-    
 		 
 		 domande=dao.getDomande(prodotto);
 		 List<List<Parametro>> passati= new ArrayList<>();
 		 
 		 this.recursive(parametri, linea, domande, parametri);
+		 
+		 if(soluzioneOttima == null) {
+			 for(WorkStation ws: linea.getListaWS()) {
+				 uMedieLock.put(ws, uMedieLock.get(ws)/countLock.get(ws));
+			 }
+			 soluzioneOttima= new OptimizationResult(uMedieLock);
+		 }
 		 
 		 
 		 return soluzioneOttima;
@@ -255,14 +266,10 @@ public class Model {
 			  List<Parametro> parametriNew=new ArrayList<>(parametri);
 			  parametriNew.remove(p);
 				
-			  for(double i=0; i+p.getMin() <= p.getMax()+0.01; i = i + 0.1 ) {//+0.01 for IEEE Arithmetic
+			  for(double i=0; i+p.getMin() <= p.getMax()+0.01; i = i + 0.1 ) {  //+0.01 for IEEE Arithmetic
 				
 				 p.setCurrent(p.getMin()+i);
-				  
-				 
 				recursive(parametriNew,linea, domande, parametriDaSalvare);
-				
-				
 				p.setCurrent(p.getMin());
 				
 			}
@@ -271,21 +278,29 @@ public class Model {
 		}
 	}
 	
-	
-
-	
-	private HashMap<WorkStation, Double> uOttime;
 	private boolean checkResult(SimResult res, List<Parametro> parametriDaSalvare) {
-		
-		
+		   boolean flag2 = false;
 		
 			HashMap<WorkStation, Double> uMedie= new HashMap<>();
 			for(WorkStation ws: res.getDiagnosiU().keySet()) {
-				if(res.getDiagnosiU().get(ws).size() < 365) { // c'è stato un blocco
-				    
-					return false;
+				if(res.getDiagnosiU().get(ws).size() == 0) {
+					flag2 = true;
 				}
 				
+				else if(res.getDiagnosiU().get(ws).size() < 365) {
+					System.out.println(ws+": "+res.getDiagnosiU().get(ws).size()+"\n");
+					flag2 = true;  // c'è stato un blocco
+					double sum=0;
+					countLock.put(ws,countLock.get(ws)+1);
+					for(DiagnosiU du:res.getDiagnosiU().get(ws)) {
+						
+						sum+=du.getUtilizzazione();
+					}
+					
+					double media = sum/res.getDiagnosiU().get(ws).size();
+					uMedieLock.put(ws,uMedieLock.get(ws)+media);
+				}
+				else{
 				double sum=0;
 				for(DiagnosiU du:res.getDiagnosiU().get(ws)) {
 					
@@ -295,8 +310,12 @@ public class Model {
 				double media = sum/res.getDiagnosiU().get(ws).size();
 				
 				uMedie.put(ws,media);
-				
+				}
 			}
+			
+			if(flag2)
+				return false;
+			
 			
 			
 			boolean flag= true;
@@ -304,7 +323,6 @@ public class Model {
 				for(WorkStation ws: res.getDiagnosiU().keySet() ) {
 					if(uMedie.get(ws) >=  uOttime.get(ws)) {
 						uOttime.put(ws,uMedie.get(ws));
-						
 					}
 					else
 						flag=false;

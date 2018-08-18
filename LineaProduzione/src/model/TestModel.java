@@ -11,14 +11,14 @@ public class TestModel {
 		
 		Linea linea= new Linea();
 		
-		WorkStation ws1= new WorkStation("ws1", 13.779, 0.3, 2);
+		WorkStation ws1= new WorkStation("ws1", 10, 0.9, 1);
 		
-		WorkStation ws2= new WorkStation("ws2", 8, 0.1, 1);
+		WorkStation ws2= new WorkStation("ws2", 15.6, 1.1, 2);
 		
-		ws1.setSetup(true);
+		/*ws1.setSetup(true);
 		ws1.setNs(new Parametro("Ns",10,7, ws1));
 		ws1.setTs(new Parametro("Ts", 2,1, ws1));
-		ws1.setCs(new Parametro("Cs", 0.9,0.8 , ws1));
+		ws1.setCs(new Parametro("Cs", 0.9,0.8 , ws1));*/
 		
 		/*ws2.setGuasti(true);
 		ws2.setMf(new Parametro("Mf",130,130, ws2));
@@ -26,8 +26,8 @@ public class TestModel {
 		ws2.setCf(new Parametro("Cf", 1.1, 1.1, ws2));
 		ws2.setCr(new Parametro("Cr", 1.1, 1.1, ws2));*/
 		
-		ws1.setRilavorazioni(true);
-		ws1.setP(new Parametro("P", 0.4, 0.2, ws1));
+		ws2.setRilavorazioni(true);
+		ws2.setP(new Parametro("P", 0.3, 0.1, ws2));
 	
 		
 		
@@ -37,8 +37,16 @@ public class TestModel {
 		linea.addWS(ws2);
 		OptimizationResult res = model.ottimizza("P_B", linea);
 		 
-		if(res == null) {
-			System.out.println("Utilizzazione eccessiva!!!");
+		if(res.getLock() != null) {
+			System.out.println("Utilizzazione eccessiva su una o più ws della linea!!! \nAlmeno un giorno per ogni anno di simulazione supera il valore massimo di utilizzazione \nValori medi di utilizzazione per ws: \n");
+			for(WorkStation ws: res.getLock().keySet()) {
+				if(res.getLock().get(ws) > 0)
+				System.out.println(ws+": "+ res.getLock().get(ws)+"\n");
+				else
+					System.out.println(ws+" utilizzazione troppo elevata fin dal primo giorno di simulazione");
+					
+			}
+			
 		}
 		else {
 		
