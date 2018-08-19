@@ -226,8 +226,11 @@ public class Controller {
     }
     
 
+    boolean SET=false;
+    
     @FXML
     void creaLinea(ActionEvent event) {
+    	if(SET) {
     	nameWS.clear();
     	t0.clear();
     	c0.clear();
@@ -268,10 +271,14 @@ public class Controller {
     	hB.setDisable(false);
     	hC.setDisable(false);
     	txtResult.setDisable(false);
+    	
+    	SET=false;
     	}
     	else
     		txtResult.setText("INSERIRE ALMENO UNA WORKSTATION ");
-    	
+    	}
+    	else
+    		txtResult.setText("Eseguire prima il SET della linea \n");
 
     }
 
@@ -397,9 +404,9 @@ public class Controller {
 				if(res.getLock().get(ws) > 0)
 					txtResult.appendText(ws+": "+ res.getLock().get(ws)+"\n");
 					else
-						txtResult.appendText(ws+" utilizzazione troppo elevata fin dal primo giorno di simulazione");
+						txtResult.appendText(ws+" utilizzazione troppo elevata fin dal primo giorno di simulazione \n");
 			}
-			txtResult.appendText("Si consiglia di abbassare i valori dei parametri con le utilizzazioni medie maggiori");
+			txtResult.appendText("Si consiglia di abbassare i valori dei parametri con le utilizzazioni medie maggiori \n");
 			
 		}
     	else {
@@ -431,7 +438,7 @@ public class Controller {
     		 List<Parametro> parametri=res.getParametriOttimi();
              Collections.sort(parametri);
              for(Parametro p:parametri) {
-            	 txtResult.appendText(p.getWs()+" "+p.getNome()+" "+p.getCurrent()+"\n"); 
+            	 txtResult.appendText(p.getWs()+" "+p.getNome()+" "+ (double)Math.round(p.getCurrent() * 100)/100+"\n"); 
              }
 
     	}
@@ -490,8 +497,8 @@ public class Controller {
 		double count2= benchMark.getCountBoth();
 		double countTH= benchMark.getCountTH();
 		double countCT= benchMark.getCountCT();
-		txtResult.appendText("Benchmarking interno: \nla linea ha avuto performances peggiori di THpwc e CTpwc "+count2+" giorni,\n "
-				+ "solo di THpwc "+countTH+" giorni,\n e solo di CTpwc "+countCT+" giorni \n");
+		txtResult.appendText("Benchmarking interno: \nla linea ha avuto performances peggiori di THpwc e CTpwc "+count2+" giorni,\n"
+				+ "solo di THpwc "+countTH+" giorni,\ne solo di CTpwc "+countCT+" giorni \n");
 		
     	}
     	else {
@@ -505,6 +512,7 @@ public class Controller {
     
     @FXML
     void setLinea(ActionEvent event) {
+    	SET=true;
     	linea=new Linea();
     	
     	hA.setDisable(true);

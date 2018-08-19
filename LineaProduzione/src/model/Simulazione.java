@@ -48,6 +48,22 @@ public class Simulazione {
 	
 	
 	public SimResult run() {
+		for(WorkStation ws: linea.getListaWS()) {
+			if(ws.isGuasti()) {
+		System.out.println(ws.getMf().getCurrent()+" Mf \n");
+		System.out.println(ws.getMr().getCurrent()+" Mr \n");
+		System.out.println(ws.getCf().getCurrent()+" Cf \n");
+		System.out.println(ws.getCr().getCurrent()+" Cr \n");
+			}
+			if(ws.isSetup()) {
+				System.out.println(ws.getNs().getCurrent()+" Ns \n");
+				System.out.println(ws.getTs().getCurrent()+" Ts \n");
+				System.out.println(ws.getCs().getCurrent()+" Cs \n");
+			}
+			if(ws.isRilavorazioni()) {
+				System.out.println(ws.getP().getCurrent()+" P \n");
+			}
+		}
 		
        Domanda d;
        SimResult result = null;
@@ -66,7 +82,7 @@ public class Simulazione {
      //suppongo linea che lavori 24/24 h
 	private boolean processDemand(Domanda d) {
 		Prestazioni prestazioni=new Prestazioni(d.getData());
-		
+		boolean flag = false;
 		
 		double ra=((double)d.getQuantita())/(24*60*60); //tasso di arrivo al secondo
 		double ca=1; //suppongo tasso arrivo mediamente variabile
@@ -147,7 +163,7 @@ public class Simulazione {
 			diagnosiU.put(ws, temp);
 			
 			if(u>1)
-				return false; // perchè si blocca la linea
+				flag = true; // perchè si blocca la linea
 			
 			
 			//calcolo le prestazioni parziali della singola workstation con la formula più generale possibile
@@ -187,9 +203,11 @@ public class Simulazione {
 				}
 				
 		}
-		
-		 
 		listaPrestazioni.add(prestazioni);
+		
+		if(flag)
+			return false;
+		
 		return true;
 		
 	}

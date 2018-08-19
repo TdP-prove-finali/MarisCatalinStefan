@@ -288,7 +288,6 @@ public class Model {
 				}
 				
 				else if(res.getDiagnosiU().get(ws).size() < 365) {
-					System.out.println(ws+": "+res.getDiagnosiU().get(ws).size()+"\n");
 					flag2 = true;  // c'è stato un blocco
 					double sum=0;
 					countLock.put(ws,countLock.get(ws)+1);
