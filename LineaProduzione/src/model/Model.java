@@ -9,6 +9,7 @@ import db.Dao;
 public class Model {
 	
 	private Dao dao;
+	private WorkStationIDMAP map;
 	
 	private List<WorkStation> listaWS;
 	private List<Domanda> domande;
@@ -20,8 +21,9 @@ public class Model {
 
 	public Model()
 	{
+		map=new WorkStationIDMAP();
 		listaWS=new ArrayList<>();
-		dao=new Dao();
+		dao=new Dao(map);
 		uOttime=new HashMap<>();
 		countLock = new HashMap<>();
 		uMedieLock= new HashMap<>();
@@ -167,15 +169,26 @@ public class Model {
 	public List<WorkStation> addWS(WorkStation ws)
 	{
 		listaWS.add(ws);
-		return listaWS;
-		
+		return listaWS;	
+	}
+	
+	public void createWS(WorkStation ws) {
+		dao.addWS(ws);
+	}
+	
+	public void deleteWS(WorkStation ws) {
+		dao.deleteWS(ws);
 	}
 
 	public void addLinea(Linea linea) {
-		
-		this.linea=linea;
-		
+		this.linea=linea;	
 	}
+	
+	public List<WorkStation> inizializzazioneWS(){
+		return dao.getWSs();
+	}
+	
+	
 	
 	private OptimizationResult soluzioneOttima;
 	

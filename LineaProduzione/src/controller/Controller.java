@@ -180,6 +180,7 @@ public class Controller {
     
     if(ws != null) {
     	linea.getListaWS().remove(ws);
+    	model.deleteWS(ws);
     	this.creaWS(event);
     	wss.getItems().remove(ws);
     	
@@ -345,6 +346,8 @@ public class Controller {
     		}
     	
     	}
+    	
+    	model.createWS(ws);
     	
     	wss.getItems().add(ws);
     	
@@ -602,6 +605,15 @@ public class Controller {
     	maxP.clear();
     	minP.clear();
     	
+    	h1.setDisable(true);
+    	h2.setDisable(true);
+    	h3.setDisable(true);
+    	h4.setDisable(true);
+    	h5.setDisable(true);
+    	h6.setDisable(true);
+    	h7.setDisable(true);
+    	h8.setDisable(true);
+    	
     WorkStation ws= wss.getValue();
     if(ws != null) {
     nameWS.setText(ws.getNome());
@@ -699,6 +711,7 @@ public class Controller {
 		this.model=model;
 		comboProdotto.getItems().addAll(model.getProdotti());
 		wss.getItems().add(new WorkStation());
+		wss.getItems().addAll(model.inizializzazioneWS());
 		
 		
 	}
