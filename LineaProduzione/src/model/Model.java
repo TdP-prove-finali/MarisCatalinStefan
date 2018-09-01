@@ -18,15 +18,14 @@ public class Model {
 	private HashMap<WorkStation, Double> uOttime;
 	private HashMap<WorkStation, Double> uMedieLock;
 	private HashMap<WorkStation, Integer> countLock;
+	
+	private OptimizationResult soluzioneOttima;
 
 	public Model()
 	{
 		map=new WorkStationIDMAP();
 		listaWS=new ArrayList<>();
 		dao=new Dao(map);
-		uOttime=new HashMap<>();
-		countLock = new HashMap<>();
-		uMedieLock= new HashMap<>();
 		
 		
 	}
@@ -190,10 +189,15 @@ public class Model {
 	
 	
 	
-	private OptimizationResult soluzioneOttima;
+	
 	
 	public OptimizationResult ottimizza(String prodotto, Linea linea) {
-			
+		
+		soluzioneOttima=null;
+		uOttime=new HashMap<>();
+		countLock = new HashMap<>();
+		uMedieLock= new HashMap<>();
+		
 		List<Parametro> parametri= new ArrayList<>();
 		
 		 for(WorkStation ws: linea.getListaWS()) {
@@ -254,8 +258,7 @@ public class Model {
 			 }
 			 soluzioneOttima= new OptimizationResult(uMedieLock);
 		 }
-		 
-		 
+		
 		 return soluzioneOttima;
 		 
 	}
@@ -344,10 +347,7 @@ public class Model {
 					return true;
 					
 				}
-					
-			
-		
-			
+						
 		return false;
 	}
 

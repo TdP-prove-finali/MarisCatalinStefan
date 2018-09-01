@@ -43,12 +43,13 @@ public class Simulazione {
 			diagnosiU.put(ws, new ArrayList<>());
 		}
 		
+		
 	}
 	
 	
 	
 	public SimResult run() {
-		for(WorkStation ws: linea.getListaWS()) {
+		/*for(WorkStation ws: linea.getListaWS()) {
 			if(ws.isGuasti()) {
 		System.out.println(ws.getMf().getCurrent()+" Mf \n");
 		System.out.println(ws.getMr().getCurrent()+" Mr \n");
@@ -63,7 +64,7 @@ public class Simulazione {
 			if(ws.isRilavorazioni()) {
 				System.out.println(ws.getP().getCurrent()+" P \n");
 			}
-		}
+		}*/
 		
        Domanda d;
        SimResult result = null;
@@ -153,8 +154,6 @@ public class Simulazione {
 			// suppongo di inserire parametri in secondi
 			
 			double u= (ra*te)/m;
-			
-			
 			
 			
 			// aggiorno elenco utilizzazioni

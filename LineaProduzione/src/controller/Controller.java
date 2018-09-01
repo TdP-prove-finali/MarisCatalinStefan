@@ -185,23 +185,6 @@ public class Controller {
     	wss.getItems().remove(ws);
     	
     	
-    	/*String nome= ws.getNome();
-    	double t0=ws.getTe();
-    	double c0= ws.getCe();
-    	int m= ws.getM();
-    	WorkStation newWS=new WorkStation()
-    	if(ws.isGuasti()) {
-    		
-    	}
-    	
-    	if(ws.isSetup()) {
-    		
-    	}
-    	
-    	if(ws.isRilavorazioni()) {
-    		
-    	}*/
-    	
     	
     }
     else
@@ -395,10 +378,12 @@ public class Controller {
 
     @FXML
     void ottimizza(ActionEvent event) {
+    
     	txtResult.clear();
     	if(linea.getListaWS().size() > 0) {
     	String prodotto = comboProdotto.getValue();
     	if(prodotto != null) {
+    		
     	OptimizationResult res= model.ottimizza(prodotto, linea);
     	
     	if(res.getLock() != null) {
@@ -437,7 +422,7 @@ public class Controller {
     				+ "solo di THpwc "+countTH+" giorni,\ne solo di CTpwc "+countCT+" giorni \n");
     		
     		
-    		 System.out.println("Parametri ottimi: \n");
+    		 txtResult.appendText("Parametri ottimi: \n");
     		 List<Parametro> parametri=res.getParametriOttimi();
              Collections.sort(parametri);
              for(Parametro p:parametri) {
