@@ -285,8 +285,8 @@ public class Model {
 			  for(double i=0; i+p.getMin() <= p.getMax()+0.01; i = i + 0.1 ) {  //+0.01 for IEEE Arithmetic
 				
 				 p.setCurrent(p.getMin()+i);
-				recursive(parametriNew,linea, domande, parametriDaSalvare);
-				p.setCurrent(p.getMin());
+				 recursive(parametriNew,linea, domande, parametriDaSalvare);
+				 p.setCurrent(p.getMin());
 				
 			}
 				

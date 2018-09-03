@@ -49,22 +49,6 @@ public class Simulazione {
 	
 	
 	public SimResult run() {
-		/*for(WorkStation ws: linea.getListaWS()) {
-			if(ws.isGuasti()) {
-		System.out.println(ws.getMf().getCurrent()+" Mf \n");
-		System.out.println(ws.getMr().getCurrent()+" Mr \n");
-		System.out.println(ws.getCf().getCurrent()+" Cf \n");
-		System.out.println(ws.getCr().getCurrent()+" Cr \n");
-			}
-			if(ws.isSetup()) {
-				System.out.println(ws.getNs().getCurrent()+" Ns \n");
-				System.out.println(ws.getTs().getCurrent()+" Ts \n");
-				System.out.println(ws.getCs().getCurrent()+" Cs \n");
-			}
-			if(ws.isRilavorazioni()) {
-				System.out.println(ws.getP().getCurrent()+" P \n");
-			}
-		}*/
 		
        Domanda d;
        SimResult result = null;
